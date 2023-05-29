@@ -18,21 +18,23 @@
         "noUncheckedIndexedAccess": true,
         "baseUrl": ".",
         "paths": {
-            "@/pages": ["./src/pages"],
-            "@/server": ["./src/server"],
-            "@/lib": ["./src/lib"],
-            "@/utils": ["./src/utils"],
-            "@/components": ["./src/components"],
-            "@/style": ["./src/style"]
-        }
+            "@/*": ["./src/*"]
+        },
+        "plugins": [
+            {
+                "name": "next"
+            }
+        ]
     },
     "include": [
+        "tailwind.config.cjs",
         ".eslintrc.cjs",
         "next-env.d.ts",
         "**/*.ts",
         "**/*.tsx",
         "**/*.cjs",
-        "**/*.mjs"
+        "**/*.mjs",
+        ".next/types/**/*.ts"
     ],
     "exclude": ["node_modules"]
 }
