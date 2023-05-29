@@ -66,10 +66,15 @@ const config = {
                     from: { height: "var(--radix-accordion-content-height)" },
                     to: { height: "0" },
                 },
+                blink: {
+                    from: { "border-left-color": "transparent" },
+                    to: { "border-left-color": "blue" },
+                },
             },
             animation: {
                 "accordion-down": "accordion-down 0.2s ease-out",
                 "accordion-up": "accordion-up 0.2s ease-out",
+                blink: "blink 1s infinite ease-in-out",
             },
         },
     },
