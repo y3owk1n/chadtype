@@ -1,15 +1,28 @@
 import { TypingLines } from "@/components";
-import { getRandomWikipediaSummary } from "@/lib";
+import { type GenerateWordOptions, generateWords } from "@/lib";
 
-export async function TypingLinesServer() {
-    const { sectionText, sectionTitle, sectionUrl } =
-        await getRandomWikipediaSummary();
+interface TypingLinesServerProps {
+    searchParams?: { [key: string]: string | string[] | undefined };
+}
+
+export async function TypingLinesServer({
+    searchParams,
+}: TypingLinesServerProps) {
+    const paramsMode = (searchParams?.mode ??
+        "wikipedia") as GenerateWordOptions["mode"];
+
+    const { sectionText, sectionTitle, sectionUrl, mode } = await generateWords(
+        {
+            mode: paramsMode,
+        }
+    );
 
     return (
         <TypingLines
             text={sectionText}
             title={sectionTitle}
             url={sectionUrl}
+            mode={mode}
         />
     );
 }

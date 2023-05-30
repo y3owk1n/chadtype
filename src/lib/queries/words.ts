@@ -1,4 +1,8 @@
-import { htmlToString, removeNonEnglishCharacters } from "@/utils";
+import {
+    getRandomEntryfromArray,
+    htmlToString,
+    removeNonEnglishCharacters,
+} from "@/utils";
 
 interface WikipediaSummary {
     title: string;
@@ -36,7 +40,58 @@ interface WikipediaSection {
     };
 }
 
-export async function getRandomWikipediaSummary() {
+interface RandomQuote {
+    text: string;
+    author: string;
+}
+
+export interface GenerateWordOptions {
+    mode: "wikipedia" | "quotes";
+}
+
+interface GenerateWordData {
+    sectionTitle: string;
+    sectionText: string;
+    sectionUrl?: string;
+    mode: GenerateWordOptions["mode"];
+}
+
+export async function generateWords({
+    mode,
+}: GenerateWordOptions): Promise<GenerateWordData> {
+    switch (mode) {
+        case "wikipedia":
+            return await getRandomWikipediaSummary();
+        case "quotes":
+            return await getRandomQuotes();
+    }
+}
+
+export async function getRandomQuotes(): Promise<GenerateWordData> {
+    const randomQuotesUrl = `https://type.fit/api/quotes`;
+
+    const randomQuotesRes = await fetch(randomQuotesUrl, { cache: "no-store" });
+
+    if (!randomQuotesRes.ok) {
+        throw new Error(`Failed to fetch random quotes`);
+    }
+
+    const randomQuoteData = (await randomQuotesRes.json()) as RandomQuote[];
+
+    if (!randomQuoteData.length) {
+        throw new Error(`No random quote length`);
+    }
+
+    const randomQuote = getRandomEntryfromArray(randomQuoteData);
+
+    return {
+        sectionTitle: randomQuote?.author as string,
+        sectionText: randomQuote?.text as string,
+        mode: "quotes",
+    };
+}
+
+export async function getRandomWikipediaSummary(): Promise<GenerateWordData> {
     const wikipediaUrl = `https://en.wikipedia.org/api/rest_v1/page/random/summary`;
     const wikipediaRes = await fetch(wikipediaUrl, { cache: "no-store" });
 
@@ -100,5 +155,6 @@ export async function getRandomWikipediaSummary() {
         sectionUrl: content_urls.desktop.page,
         sectionTitle: wikipediaSectionTitle,
         sectionText,
+        mode: "wikipedia",
     };
 }

@@ -7,12 +7,16 @@ export const metadata: Metadata = {
     description: "Welcome to Next.js",
 };
 
-export default function Page() {
+interface PageProps {
+    searchParams?: { [key: string]: string | string[] | undefined };
+}
+
+export default function Page({ searchParams }: PageProps) {
     return (
         <div className="grid h-screen place-items-center">
             <Suspense fallback={<p>Loading...</p>}>
                 {/* @ts-expect-error Async Server Component */}
-                <TypingLinesServer />
+                <TypingLinesServer searchParams={searchParams} />
             </Suspense>
         </div>
     );
