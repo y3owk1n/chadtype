@@ -80,7 +80,7 @@ export function useTypeContext({ count }: { count: number }) {
 
             const durationInMinutes = (currentTime() - startTime) / 60000.0;
 
-            const wpm = (currentWord + 1) / durationInMinutes;
+            const wpm = currentCharIndex / durationInMinutes / 5;
 
             setWpm(wpm);
             setAuccuracy(calculateAccuracy());
