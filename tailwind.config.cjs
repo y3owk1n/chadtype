@@ -67,8 +67,8 @@ const config = {
                     to: { height: "0" },
                 },
                 blink: {
-                    from: { "border-left-color": "transparent" },
-                    to: { "border-left-color": "blue" },
+                    from: { "background-color": "transparent" },
+                    to: { "background-color": "hsl(var(--primary))" },
                 },
             },
             animation: {

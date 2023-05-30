@@ -289,9 +289,7 @@ export function TypingLines({
                         ref={ref}
                         className={cn(
                             " text-gray-300",
-                            isTypingEnd() || !startTyping
-                                ? ""
-                                : "animate-blink border-l-2 border-blue-500"
+                            isTypingEnd() || !startTyping ? "" : "animate-blink"
                         )}
                     >
                         {currentCharacter}
