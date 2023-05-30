@@ -1,4 +1,4 @@
-/** @type {import("prettier").Config} */
+/** @type {import("prettier").Config & import('@trivago/prettier-plugin-sort-imports').PrettierConfig} */
 const config = {
     trailingComma: "es5",
     tabWidth: 4,
