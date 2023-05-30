@@ -102,7 +102,7 @@ export function useTypeContext({ text }: { text: string }) {
         }
     });
 
-    const handleRestart = () => {
+    const restart = () => {
         setAuccuracy(0);
         setCurrentCharIndex(0);
         setCurrentWord(0);
@@ -111,6 +111,10 @@ export function useTypeContext({ text }: { text: string }) {
         setTotalDuration(0);
         setStartTyping(false);
         setErrorIndex([]);
+    };
+
+    const handleRestart = () => {
+        restart();
         router.refresh();
     };
 
@@ -137,5 +141,6 @@ export function useTypeContext({ text }: { text: string }) {
         handleRestart,
         startTyping,
         errorIndexBeforeCurrentCharacter,
+        restart,
     };
 }
