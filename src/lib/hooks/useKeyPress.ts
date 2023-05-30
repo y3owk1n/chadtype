@@ -9,7 +9,7 @@ export function useKeyPress(callback: (key: string) => void): string | null {
     // If pressed key is our target key then set to true
     const downHandler = useCallback(
         ({ key }: { key: string }) => {
-            if (keyPressed !== key && key.length === 1) {
+            if (keyPressed !== key) {
                 setKeyPressed(key);
                 callback && callback(key);
             }
