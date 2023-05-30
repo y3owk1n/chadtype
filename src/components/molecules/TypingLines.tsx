@@ -6,7 +6,15 @@ import { ExternalLinkIcon, RotateCw } from "lucide-react";
 import { useRef } from "react";
 import { useInView } from "react-intersection-observer";
 
-import { Badge, Button, badgeVariants } from "../atoms";
+import {
+    Badge,
+    Button,
+    Tooltip,
+    TooltipContent,
+    TooltipProvider,
+    TooltipTrigger,
+    badgeVariants,
+} from "../atoms";
 
 interface TypingLinesProps {
     text: string;
@@ -64,6 +72,8 @@ export function TypingLines({ text, title, url }: TypingLinesProps) {
                         <span>to start typing for</span>
                         <a
                             href={url}
+                            target="_blank"
+                            rel="noopener"
                             className={cn(
                                 badgeVariants({ variant: "outline" }),
                                 "mx-2 text-xs text-gray-500"
@@ -123,72 +133,77 @@ export function TypingLines({ text, title, url }: TypingLinesProps) {
             </div>
             <div className="mx-auto flex items-center gap-2">
                 <Badge
-                    className="w-fit"
+                    className="w-fit text-xs text-gray-500"
                     variant="outline"
                 >
                     WPM: {wpm.toFixed(2)}
                 </Badge>
                 <Badge
-                    className="w-fit"
+                    className="w-fit text-xs text-gray-500"
                     variant="outline"
                 >
                     Accuracy: {accuracy}%
                 </Badge>
                 <Badge
-                    className="w-fit"
+                    className="w-fit text-xs text-gray-500"
                     variant="outline"
                 >
                     Time: {totalDuration} mins
                 </Badge>
                 <Badge
-                    className="w-fit"
+                    className="w-fit text-xs text-gray-500"
                     variant="outline"
                 >
                     Words: {currentCharIndex} / {text.length}
                 </Badge>
             </div>
             {isTypingEnd() && (
-                <div className="flex items-center gap-2">
-                    <Button
-                        aria-label="Restart"
-                        size="sm"
-                        className="mx-auto w-fit"
-                        onClick={handleRestart}
-                        variant="ghost"
-                    >
-                        <RotateCw className="h-4 w-4" />
-                    </Button>
-                    <Button
-                        aria-label="Restart"
-                        size="sm"
-                        className="mx-auto w-fit"
-                        onClick={handleRestart}
-                        variant="ghost"
-                    >
-                        <RotateCw className="h-4 w-4" />
-                    </Button>
+                <div className="mx-auto flex items-center gap-2">
+                    <TooltipProvider>
+                        <Tooltip>
+                            <TooltipTrigger>
+                                <Button
+                                    aria-label="Restart"
+                                    size="sm"
+                                    className="mx-auto w-fit"
+                                    onClick={handleRestart}
+                                    variant="ghost"
+                                >
+                                    <RotateCw className="h-4 w-4" />
+                                </Button>
+                            </TooltipTrigger>
+                            <TooltipContent>
+                                <p>Restart</p>
+                            </TooltipContent>
+                        </Tooltip>
+                    </TooltipProvider>
+
+                    <TooltipProvider>
+                        <Tooltip>
+                            <TooltipTrigger>
+                                <Button
+                                    aria-label="Visit Link"
+                                    asChild
+                                    size="sm"
+                                    className="mx-auto w-fit"
+                                    variant="ghost"
+                                >
+                                    <a
+                                        target="_blank"
+                                        rel="noopener"
+                                        href={url}
+                                    >
+                                        <ExternalLinkIcon className="rr-2 h-4 w-4" />
+                                    </a>
+                                </Button>
+                            </TooltipTrigger>
+                            <TooltipContent>
+                                <p>Visit Wikipedia</p>
+                            </TooltipContent>
+                        </Tooltip>
+                    </TooltipProvider>
                 </div>
             )}
-            <div className="mx-auto flex w-fit">
-                <Button
-                    aria-label="Restart"
-                    size="sm"
-                    className="mx-auto w-fit"
-                    onClick={handleRestart}
-                    variant="ghost"
-                >
-                    <RotateCw className="h-4 w-4" />
-                </Button>
-                <Button
-                    aria-label="Visit Link"
-                    size="sm"
-                    className="mx-auto w-fit"
-                    onClick={handleRestart}
-                    variant="ghost"
-                >
-                    <ExternalLinkIcon className="mr-2 h-4 w-4" />
-                </Button>
-            </div>
         </div>
     );
 }
