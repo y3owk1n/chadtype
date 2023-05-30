@@ -2,17 +2,19 @@
 
 import { useTypeContext } from "@/lib";
 import { cn } from "@/utils";
-import { RotateCw } from "lucide-react";
+import { ExternalLinkIcon, RotateCw } from "lucide-react";
 import { useRef } from "react";
 import { useInView } from "react-intersection-observer";
 
-import { Badge, Button } from "../atoms";
+import { Badge, Button, badgeVariants } from "../atoms";
 
 interface TypingLinesProps {
     text: string;
+    title: string;
+    url: string;
 }
 
-export function TypingLines({ text }: TypingLinesProps) {
+export function TypingLines({ text, title, url }: TypingLinesProps) {
     const {
         wordsBeforeCurrentCharacter,
         currentCharacter,
@@ -51,16 +53,26 @@ export function TypingLines({ text }: TypingLinesProps) {
                         🚀 Type as fast as you can!
                     </p>
                 ) : (
-                    <p className={cn("text-xs text-gray-500")}>
-                        Press{" "}
+                    <div className={cn("text-xs text-gray-500")}>
+                        <span>Press</span>
                         <Badge
-                            className="text-xs text-gray-500"
+                            className="mx-1 text-xs text-gray-500"
                             variant="outline"
                         >
                             Enter
-                        </Badge>{" "}
-                        to start
-                    </p>
+                        </Badge>
+                        <span>to start typing for</span>
+                        <a
+                            href={url}
+                            className={cn(
+                                badgeVariants({ variant: "outline" }),
+                                "mx-2 text-xs text-gray-500"
+                            )}
+                        >
+                            {title}
+                            <ExternalLinkIcon className="ml-2 h-3 w-3" />
+                        </a>
+                    </div>
                 )}
 
                 <div
@@ -136,6 +148,28 @@ export function TypingLines({ text }: TypingLinesProps) {
                 </Badge>
             </div>
             {isTypingEnd() && (
+                <div className="flex items-center gap-2">
+                    <Button
+                        aria-label="Restart"
+                        size="sm"
+                        className="mx-auto w-fit"
+                        onClick={handleRestart}
+                        variant="ghost"
+                    >
+                        <RotateCw className="h-4 w-4" />
+                    </Button>
+                    <Button
+                        aria-label="Restart"
+                        size="sm"
+                        className="mx-auto w-fit"
+                        onClick={handleRestart}
+                        variant="ghost"
+                    >
+                        <RotateCw className="h-4 w-4" />
+                    </Button>
+                </div>
+            )}
+            <div className="mx-auto flex w-fit">
                 <Button
                     aria-label="Restart"
                     size="sm"
@@ -145,7 +179,16 @@ export function TypingLines({ text }: TypingLinesProps) {
                 >
                     <RotateCw className="h-4 w-4" />
                 </Button>
-            )}
+                <Button
+                    aria-label="Visit Link"
+                    size="sm"
+                    className="mx-auto w-fit"
+                    onClick={handleRestart}
+                    variant="ghost"
+                >
+                    <ExternalLinkIcon className="mr-2 h-4 w-4" />
+                </Button>
+            </div>
         </div>
     );
 }

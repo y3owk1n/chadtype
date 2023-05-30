@@ -4,7 +4,18 @@ interface WikipediaSummary {
     title: string;
     author: string;
     pageid: number;
+    content_urls: {
+        desktop: WikipediaSummaryContentUrls;
+        mobile: WikipediaSummaryContentUrls;
+    };
 }
+
+type WikipediaSummaryContentUrls = {
+    page: string;
+    revisions: string;
+    edit: string;
+    talk: string;
+};
 
 interface WikipediaSection {
     batchcomplete: string;
@@ -33,7 +44,9 @@ export async function getRandomWikipediaSummary() {
         throw new Error(`Failed to summary data`);
     }
 
-    const { pageid } = (await wikipediaRes.json()) as WikipediaSummary;
+    const wikipediaData = (await wikipediaRes.json()) as WikipediaSummary;
+
+    const { pageid, content_urls } = wikipediaData;
 
     if (!pageid) {
         throw new Error(`No pageid found`);
@@ -53,8 +66,11 @@ export async function getRandomWikipediaSummary() {
     const wikipediaSectionText =
         wikipediaSectionData.query.pages[pageid]?.extract;
 
-    if (!wikipediaSectionText) {
-        throw new Error(`Unable to get extracted text from section`);
+    const wikipediaSectionTitle =
+        wikipediaSectionData.query.pages[pageid]?.title;
+
+    if (!wikipediaSectionText || !wikipediaSectionTitle) {
+        throw new Error(`Unable to get extracted text or title from section`);
     }
 
     let sectionText = wikipediaSectionText;
@@ -74,13 +90,15 @@ export async function getRandomWikipediaSummary() {
     // Convert all whitespace to space
     sectionText = sectionText.replace(/\s+/g, " ");
 
-    console.log({ sectionText });
-
     // Remove all non english text
     sectionText = removeNonEnglishCharacters(sectionText);
 
     // Removing whitespace before and after text
     sectionText = sectionText.trim();
 
-    return sectionText;
+    return {
+        sectionUrl: content_urls.desktop.page,
+        sectionTitle: wikipediaSectionTitle,
+        sectionText,
+    };
 }
