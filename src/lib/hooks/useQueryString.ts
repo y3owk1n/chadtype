@@ -3,14 +3,13 @@
 import { arrayToKvObject } from "@/utils";
 import { type Route } from "next";
 import { useSearchParams, usePathname, useRouter } from "next/navigation";
-import { useMemo, useCallback, type DependencyList } from "react";
+import { useMemo, useCallback } from "react";
 
 /**
  * Custom hook to manage query strings
- * @param {DependencyList} deps - Dependency list
  * @returns {Object} - An object containing the redirectWithQs and params functions
  */
-export function useQueryString(deps?: DependencyList): {
+export function useQueryString({ callback }: { callback?: () => void }): {
     redirectWithQs: (kvArray: { key: string; value: string }[]) => void;
     params: URLSearchParams;
 } {
@@ -49,14 +48,15 @@ export function useQueryString(deps?: DependencyList): {
                 createQueryString(arrayToKvObject(kvArray))) as Route;
             return href;
         },
-        [deps] ?? []
+        [createQueryString, pathname]
     );
 
     const redirectWithQs = useCallback(
         (kvArray: { key: string; value: string }[]) => {
+            callback && callback();
             router.push(createQueryStringWithUrl(kvArray));
         },
-        deps ?? []
+        [callback, createQueryStringWithUrl, router]
     );
 
     return { redirectWithQs, params };
