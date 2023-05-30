@@ -47,6 +47,7 @@ export function TypingLines({
         startTyping,
         errorIndexBeforeCurrentCharacter,
         currentCharIndex,
+        restart,
     } = useTypeContext({ text });
 
     const containerRef = useRef<HTMLDivElement>(null);
@@ -65,7 +66,7 @@ export function TypingLines({
         },
     });
 
-    const { redirectWithQs } = useQueryString();
+    const { redirectWithQs } = useQueryString({ callback: restart });
 
     return (
         <div className=" grid w-full max-w-4xl gap-8 ">
