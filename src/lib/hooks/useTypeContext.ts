@@ -16,6 +16,7 @@ const ignoreKeys = [
     "ArrowUp",
     "ArrowRight",
     "ArrowLeft",
+    "Enter",
 ];
 
 export function useTypeContext({ text }: { text: string }) {

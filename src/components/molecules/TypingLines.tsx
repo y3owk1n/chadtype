@@ -3,6 +3,8 @@
 import { useTypeContext } from "@/lib";
 import { cn } from "@/utils";
 import { RotateCw } from "lucide-react";
+import { useRef } from "react";
+import { useInView } from "react-intersection-observer";
 
 import { Badge, Button } from "../atoms";
 
@@ -24,8 +26,24 @@ export function TypingLines({ text }: TypingLinesProps) {
         errorIndexBeforeCurrentCharacter,
     } = useTypeContext({ text });
 
+    const containerRef = useRef<HTMLDivElement>(null);
+
+    const { ref } = useInView({
+        root: containerRef.current,
+        rootMargin: "0px 0px -50px 0px",
+        onChange: (inView, entry) => {
+            if (!inView && containerRef.current) {
+                const lineHeight = entry.boundingClientRect.height;
+                containerRef.current.scrollTop -=
+                    containerRef.current.getBoundingClientRect().y -
+                    entry.boundingClientRect.y +
+                    lineHeight;
+            }
+        },
+    });
+
     return (
-        <div className="grid max-w-2xl gap-8 ">
+        <div className="grid max-w-4xl gap-8 ">
             <div className="grid gap-8">
                 {startTyping || !isTypingEnd ? (
                     <p className="text-xs text-gray-500">
@@ -44,7 +62,10 @@ export function TypingLines({ text }: TypingLinesProps) {
                     </p>
                 )}
 
-                <p className="font-mono text-lg">
+                <div
+                    ref={containerRef}
+                    className="h-24 overflow-hidden font-mono text-2xl"
+                >
                     {wordsBeforeCurrentCharacter.length > 0 &&
                         wordsBeforeCurrentCharacter.map((word, index) => (
                             <span
@@ -65,6 +86,7 @@ export function TypingLines({ text }: TypingLinesProps) {
                             </span>
                         ))}
                     <span
+                        ref={ref}
                         className={cn(
                             " text-gray-300",
                             isTypingEnd() || !startTyping
@@ -84,7 +106,7 @@ export function TypingLines({ text }: TypingLinesProps) {
                                 {word}
                             </span>
                         ))}
-                </p>
+                </div>
             </div>
             <div className="mx-auto flex items-center gap-2">
                 <Badge
@@ -112,7 +134,7 @@ export function TypingLines({ text }: TypingLinesProps) {
                     Words: {text.length}
                 </Badge>
             </div>
-            {(isTypingEnd() || startTyping) && (
+            {isTypingEnd() && (
                 <Button
                     aria-label="Restart"
                     size="sm"
