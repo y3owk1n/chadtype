@@ -6,9 +6,11 @@ import { RotateCw } from "lucide-react";
 
 import { Badge, Button } from "../atoms";
 
-const count = 10;
+interface TypingLinesProps {
+    text: string;
+}
 
-export function TypingLines() {
+export function TypingLines({ text }: TypingLinesProps) {
     const {
         wordsBeforeCurrentCharacter,
         currentCharacter,
@@ -20,7 +22,7 @@ export function TypingLines() {
         isTypingEnd,
         startTyping,
         errorIndexBeforeCurrentCharacter,
-    } = useTypeContext({ count });
+    } = useTypeContext({ text });
 
     return (
         <div className="grid max-w-2xl gap-8 ">
@@ -89,7 +91,7 @@ export function TypingLines() {
                     className="w-fit"
                     variant="outline"
                 >
-                    wpm: {wpm.toFixed(2)}
+                    WPM: {wpm.toFixed(2)}
                 </Badge>
                 <Badge
                     className="w-fit"
@@ -101,7 +103,13 @@ export function TypingLines() {
                     className="w-fit"
                     variant="outline"
                 >
-                    time: {totalDuration} mins
+                    Time: {totalDuration} mins
+                </Badge>
+                <Badge
+                    className="w-fit"
+                    variant="outline"
+                >
+                    Words: {text.length}
                 </Badge>
             </div>
             {(isTypingEnd() || startTyping) && (
