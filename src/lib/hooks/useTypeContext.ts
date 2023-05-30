@@ -131,6 +131,7 @@ export function useTypeContext({ text }: { text: string }) {
         wordsAfterCurrentCharacter,
         isTypingEnd,
         wpm,
+        currentCharIndex,
         accuracy: accuracy.toFixed(2),
         totalDuration: totalDuration.toFixed(2),
         handleRestart,

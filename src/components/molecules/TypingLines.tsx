@@ -24,6 +24,7 @@ export function TypingLines({ text }: TypingLinesProps) {
         isTypingEnd,
         startTyping,
         errorIndexBeforeCurrentCharacter,
+        currentCharIndex,
     } = useTypeContext({ text });
 
     const containerRef = useRef<HTMLDivElement>(null);
@@ -131,7 +132,7 @@ export function TypingLines({ text }: TypingLinesProps) {
                     className="w-fit"
                     variant="outline"
                 >
-                    Words: {text.length}
+                    Words: {currentCharIndex} / {text.length}
                 </Badge>
             </div>
             {isTypingEnd() && (
