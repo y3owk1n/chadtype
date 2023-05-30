@@ -17,16 +17,24 @@ import {
     TooltipProvider,
     TooltipTrigger,
     badgeVariants,
+    buttonVariants,
 } from "../atoms";
 
 interface TypingLinesProps {
     text: string;
-    title: string;
+    title?: string;
     url?: string;
     mode: GenerateWordOptions["mode"];
+    numberOfWords: number;
 }
 
-export function TypingLines({ text, title, url, mode }: TypingLinesProps) {
+export function TypingLines({
+    text,
+    title,
+    url,
+    mode,
+    numberOfWords,
+}: TypingLinesProps) {
     const {
         wordsBeforeCurrentCharacter,
         currentCharacter,
@@ -61,26 +69,144 @@ export function TypingLines({ text, title, url, mode }: TypingLinesProps) {
 
     return (
         <div className=" grid w-full max-w-4xl gap-8 ">
-            <div className="mx-auto">
-                <ButtonGroup>
-                    <Button
-                        className="text-xs"
-                        variant={mode === "wikipedia" ? "secondary" : "outline"}
-                        size="sm"
-                        onClick={() => redirectWithQs("mode", "wikipedia")}
-                    >
-                        Wikipedia
-                    </Button>
-                    <Button
-                        className="text-xs"
-                        variant={mode === "quotes" ? "secondary" : "outline"}
-                        size="sm"
-                        onClick={() => redirectWithQs("mode", "quotes")}
-                    >
-                        Quote
-                    </Button>
-                </ButtonGroup>
+            <div className="grid w-full gap-2">
+                <div className="mx-auto">
+                    <ButtonGroup>
+                        <Button
+                            className="text-xs"
+                            variant={
+                                mode === "wikipedia" ? "default" : "outline"
+                            }
+                            size="sm"
+                            onClick={() =>
+                                redirectWithQs([
+                                    { key: "mode", value: "wikipedia" },
+                                    {
+                                        key: "numberOfWords",
+                                        value: "",
+                                    },
+                                ])
+                            }
+                        >
+                            Wikipedia
+                        </Button>
+                        <Button
+                            className="text-xs"
+                            variant={mode === "quotes" ? "default" : "outline"}
+                            size="sm"
+                            onClick={() =>
+                                redirectWithQs([
+                                    { key: "mode", value: "quotes" },
+                                    {
+                                        key: "numberOfWords",
+                                        value: "",
+                                    },
+                                ])
+                            }
+                        >
+                            Quote
+                        </Button>
+                        <Button
+                            className="text-xs"
+                            variant={mode === "words" ? "default" : "outline"}
+                            size="sm"
+                            onClick={() =>
+                                redirectWithQs([
+                                    { key: "mode", value: "words" },
+                                    {
+                                        key: "numberOfWords",
+                                        value: numberOfWords.toString(),
+                                    },
+                                ])
+                            }
+                        >
+                            Words
+                        </Button>
+                    </ButtonGroup>
+                </div>
+
+                {mode === "words" && numberOfWords && (
+                    <div className="mx-auto">
+                        <ButtonGroup>
+                            <Button
+                                className="text-xs"
+                                variant={
+                                    numberOfWords === 10 ? "default" : "outline"
+                                }
+                                size="sm"
+                                onClick={() =>
+                                    redirectWithQs([
+                                        { key: "mode", value: "words" },
+                                        {
+                                            key: "numberOfWords",
+                                            value: "10",
+                                        },
+                                    ])
+                                }
+                            >
+                                10
+                            </Button>
+                            <Button
+                                className="text-xs"
+                                variant={
+                                    numberOfWords === 30 ? "default" : "outline"
+                                }
+                                size="sm"
+                                onClick={() =>
+                                    redirectWithQs([
+                                        { key: "mode", value: "words" },
+                                        {
+                                            key: "numberOfWords",
+                                            value: "30",
+                                        },
+                                    ])
+                                }
+                            >
+                                30
+                            </Button>
+                            <Button
+                                className="text-xs"
+                                variant={
+                                    numberOfWords === 50 ? "default" : "outline"
+                                }
+                                size="sm"
+                                onClick={() =>
+                                    redirectWithQs([
+                                        { key: "mode", value: "words" },
+                                        {
+                                            key: "numberOfWords",
+                                            value: "50",
+                                        },
+                                    ])
+                                }
+                            >
+                                50
+                            </Button>
+                            <Button
+                                className="text-xs"
+                                variant={
+                                    numberOfWords === 100
+                                        ? "default"
+                                        : "outline"
+                                }
+                                size="sm"
+                                onClick={() =>
+                                    redirectWithQs([
+                                        { key: "mode", value: "words" },
+                                        {
+                                            key: "numberOfWords",
+                                            value: "100",
+                                        },
+                                    ])
+                                }
+                            >
+                                100
+                            </Button>
+                        </ButtonGroup>
+                    </div>
+                )}
             </div>
+
             <div className="grid  gap-8">
                 {startTyping || !isTypingEnd ? (
                     <p className="h-5 text-xs text-gray-500">
@@ -123,6 +249,14 @@ export function TypingLines({ text, title, url, mode }: TypingLinesProps) {
                                 variant="outline"
                             >
                                 {title}
+                            </Badge>
+                        )}
+                        {mode === "words" && (
+                            <Badge
+                                className="mx-1 text-xs text-gray-500"
+                                variant="outline"
+                            >
+                                {numberOfWords} words
                             </Badge>
                         )}
                     </div>
@@ -197,23 +331,27 @@ export function TypingLines({ text, title, url, mode }: TypingLinesProps) {
                     className="w-fit text-xs text-gray-500"
                     variant="outline"
                 >
-                    Words: {currentCharIndex} / {text.length}
+                    Characters: {currentCharIndex} / {text.length}
                 </Badge>
             </div>
             {isTypingEnd() && (
                 <div className="mx-auto flex items-center gap-2">
                     <TooltipProvider>
                         <Tooltip>
-                            <TooltipTrigger>
-                                <Button
+                            <TooltipTrigger asChild>
+                                <div
+                                    className={cn(
+                                        buttonVariants({
+                                            size: "sm",
+                                            variant: "ghost",
+                                        }),
+                                        "mx-auto w-fit cursor-pointer"
+                                    )}
                                     aria-label="Restart"
-                                    size="sm"
-                                    className="mx-auto w-fit"
                                     onClick={handleRestart}
-                                    variant="ghost"
                                 >
                                     <RotateCw className="h-4 w-4" />
-                                </Button>
+                                </div>
                             </TooltipTrigger>
                             <TooltipContent>
                                 <p>Restart</p>
@@ -224,22 +362,23 @@ export function TypingLines({ text, title, url, mode }: TypingLinesProps) {
                     {mode === "wikipedia" && (
                         <TooltipProvider>
                             <Tooltip>
-                                <TooltipTrigger>
-                                    <Button
-                                        aria-label="Visit Link"
-                                        asChild
-                                        size="sm"
-                                        className="mx-auto w-fit"
-                                        variant="ghost"
+                                <TooltipTrigger
+                                    asChild
+                                    className={cn(
+                                        buttonVariants({
+                                            size: "sm",
+                                            variant: "ghost",
+                                        }),
+                                        "mx-auto w-fit"
+                                    )}
+                                >
+                                    <a
+                                        target="_blank"
+                                        rel="noopener"
+                                        href={url}
                                     >
-                                        <a
-                                            target="_blank"
-                                            rel="noopener"
-                                            href={url}
-                                        >
-                                            <ExternalLinkIcon className="rr-2 h-4 w-4" />
-                                        </a>
-                                    </Button>
+                                        <ExternalLinkIcon className="rr-2 h-4 w-4" />
+                                    </a>
                                 </TooltipTrigger>
                                 <TooltipContent>
                                     <p>Visit Wikipedia</p>

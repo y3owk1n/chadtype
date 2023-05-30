@@ -1,8 +1,13 @@
+"use server";
+
 import {
     getRandomEntryfromArray,
+    getRandomWordsWithLimit,
     htmlToString,
     removeNonEnglishCharacters,
 } from "@/utils";
+import { promises as fs } from "fs";
+import path from "path";
 
 interface WikipediaSummary {
     title: string;
@@ -45,12 +50,17 @@ interface RandomQuote {
     author: string;
 }
 
+interface RandomWord {
+    text: string;
+}
+
 export interface GenerateWordOptions {
-    mode: "wikipedia" | "quotes";
+    mode: "wikipedia" | "quotes" | "words";
+    numberOfWords?: number;
 }
 
 interface GenerateWordData {
-    sectionTitle: string;
+    sectionTitle?: string;
     sectionText: string;
     sectionUrl?: string;
     mode: GenerateWordOptions["mode"];
@@ -58,13 +68,47 @@ interface GenerateWordData {
 
 export async function generateWords({
     mode,
+    numberOfWords,
 }: GenerateWordOptions): Promise<GenerateWordData> {
     switch (mode) {
         case "wikipedia":
             return await getRandomWikipediaSummary();
         case "quotes":
             return await getRandomQuotes();
+        case "words":
+            return await getRandomWords({ numberOfWords: numberOfWords || 30 });
     }
+}
+
+export async function getRandomWords({
+    numberOfWords,
+}: {
+    numberOfWords: number;
+}): Promise<GenerateWordData> {
+    //Find the absolute path of the json directory
+    const jsonDirectory = path.join(process.cwd(), "src", "lib", "data");
+
+    //Read the json data file data.json
+    const fileContents = await fs.readFile(
+        jsonDirectory + "/words.json",
+        "utf8"
+    );
+
+    const parsedFileContents = JSON.parse(fileContents) as RandomWord[];
+
+    const randomWords = getRandomWordsWithLimit(
+        parsedFileContents,
+        numberOfWords
+    );
+
+    const formattedRandomWords = randomWords.map((word) => word.text);
+
+    const joinedRandomWords = formattedRandomWords.join(" ");
+
+    return {
+        sectionText: joinedRandomWords,
+        mode: "words",
+    };
 }
 
 export async function getRandomQuotes(): Promise<GenerateWordData> {

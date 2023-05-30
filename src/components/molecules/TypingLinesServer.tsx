@@ -8,12 +8,15 @@ interface TypingLinesServerProps {
 export async function TypingLinesServer({
     searchParams,
 }: TypingLinesServerProps) {
-    const paramsMode = (searchParams?.mode ??
+    const paramsMode = (searchParams?.mode ||
         "wikipedia") as GenerateWordOptions["mode"];
+
+    const paramsNumberOfWords = (searchParams?.numberOfWords || 30) as number;
 
     const { sectionText, sectionTitle, sectionUrl, mode } = await generateWords(
         {
             mode: paramsMode,
+            numberOfWords: paramsNumberOfWords,
         }
     );
 
@@ -23,6 +26,7 @@ export async function TypingLinesServer({
             title={sectionTitle}
             url={sectionUrl}
             mode={mode}
+            numberOfWords={Number(paramsNumberOfWords)}
         />
     );
 }

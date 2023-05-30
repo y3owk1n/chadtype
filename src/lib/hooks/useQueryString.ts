@@ -11,7 +11,7 @@ import { useMemo, useCallback, type DependencyList } from "react";
  * @returns {Object} - An object containing the redirectWithQs and params functions
  */
 export function useQueryString(deps?: DependencyList): {
-    redirectWithQs: (key: string, value: string) => void;
+    redirectWithQs: (kvArray: { key: string; value: string }[]) => void;
     params: URLSearchParams;
 } {
     const router = useRouter();
@@ -43,25 +43,21 @@ export function useQueryString(deps?: DependencyList): {
     );
 
     const createQueryStringWithUrl = useCallback(
-        (key: string, value: string) => {
+        (kvArray: { key: string; value: string }[]) => {
             const href = (pathname +
                 "?" +
-                createQueryString(
-                    arrayToKvObject([
-                        {
-                            key,
-                            value,
-                        },
-                    ])
-                )) as Route;
+                createQueryString(arrayToKvObject(kvArray))) as Route;
             return href;
         },
         [deps] ?? []
     );
 
-    const redirectWithQs = useCallback((key: string, value: string) => {
-        router.push(createQueryStringWithUrl(key, value));
-    }, deps ?? []);
+    const redirectWithQs = useCallback(
+        (kvArray: { key: string; value: string }[]) => {
+            router.push(createQueryStringWithUrl(kvArray));
+        },
+        deps ?? []
+    );
 
     return { redirectWithQs, params };
 }
