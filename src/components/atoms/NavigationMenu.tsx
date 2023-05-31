@@ -1,3 +1,5 @@
+"use client";
+
 import { cn } from "@/utils";
 import * as NavigationMenuPrimitive from "@radix-ui/react-navigation-menu";
 import { cva } from "class-variance-authority";

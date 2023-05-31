@@ -4,13 +4,19 @@ import { type GenerateWordOptions, useTypeContext } from "@/lib";
 import { useQueryString } from "@/lib/hooks/useQueryString";
 import { cn } from "@/utils";
 import { ExternalLinkIcon, RotateCw } from "lucide-react";
+import Link from "next/link";
 import { useRef } from "react";
 import { useInView } from "react-intersection-observer";
+import { Z_UNKNOWN } from "zlib";
 
 import {
     Badge,
     Button,
     ButtonGroup,
+    NavigationMenu,
+    NavigationMenuItem,
+    NavigationMenuLink,
+    NavigationMenuList,
     Separator,
     Tooltip,
     TooltipContent,
@@ -18,6 +24,7 @@ import {
     TooltipTrigger,
     badgeVariants,
     buttonVariants,
+    navigationMenuTriggerStyle,
 } from "../atoms";
 
 interface TypingLinesProps {
@@ -27,6 +34,32 @@ interface TypingLinesProps {
     mode: GenerateWordOptions["mode"];
     numberOfWords: number;
 }
+
+interface ModeMenu {
+    pathname: string;
+    mode: GenerateWordOptions["mode"];
+    numberOfWords?: GenerateWordOptions["numberOfWords"];
+    label: string;
+}
+
+const modeMenu: ModeMenu[] = [
+    {
+        pathname: "/",
+        mode: "wikipedia",
+        label: "Wikipedia",
+    },
+    {
+        pathname: "/",
+        mode: "quotes",
+        label: "Quotes",
+    },
+    {
+        pathname: "/",
+        mode: "words",
+        label: "Words",
+        numberOfWords: 30,
+    },
+];
 
 export function TypingLines({
     text,
@@ -66,66 +99,47 @@ export function TypingLines({
         },
     });
 
-    const { redirectWithQs } = useQueryString({ callback: restart });
+    const { redirectWithQs, createQueryStringWithUrl } = useQueryString({
+        callback: restart,
+    });
 
     return (
         <div className=" grid w-full max-w-4xl gap-8 ">
             <div className="grid w-full gap-2">
-                <div className="mx-auto">
-                    <ButtonGroup>
-                        <Button
-                            className="text-xs"
-                            variant={
-                                mode === "wikipedia" ? "default" : "outline"
+                <NavigationMenu>
+                    <NavigationMenuList>
+                        {modeMenu.map((menu) => {
+                            let query;
+                            if (menu.numberOfWords) {
+                                query = {
+                                    mode: menu.mode,
+                                    numberOfWords: menu.numberOfWords,
+                                };
+                            } else {
+                                query = {
+                                    mode: menu.mode,
+                                };
                             }
-                            size="sm"
-                            onClick={() =>
-                                redirectWithQs([
-                                    { key: "mode", value: "wikipedia" },
-                                    {
-                                        key: "numberOfWords",
-                                        value: "",
-                                    },
-                                ])
-                            }
-                        >
-                            Wikipedia
-                        </Button>
-                        <Button
-                            className="text-xs"
-                            variant={mode === "quotes" ? "default" : "outline"}
-                            size="sm"
-                            onClick={() =>
-                                redirectWithQs([
-                                    { key: "mode", value: "quotes" },
-                                    {
-                                        key: "numberOfWords",
-                                        value: "",
-                                    },
-                                ])
-                            }
-                        >
-                            Quote
-                        </Button>
-                        <Button
-                            className="text-xs"
-                            variant={mode === "words" ? "default" : "outline"}
-                            size="sm"
-                            onClick={() =>
-                                redirectWithQs([
-                                    { key: "mode", value: "words" },
-                                    {
-                                        key: "numberOfWords",
-                                        value: numberOfWords.toString(),
-                                    },
-                                ])
-                            }
-                        >
-                            Words
-                        </Button>
-                    </ButtonGroup>
-                </div>
-
+                            return (
+                                <NavigationMenuItem key={menu.label}>
+                                    <Link
+                                        href={{
+                                            pathname: menu.pathname,
+                                            query,
+                                        }}
+                                    >
+                                        <NavigationMenuLink
+                                            active={mode === menu.mode}
+                                            className={navigationMenuTriggerStyle()}
+                                        >
+                                            {menu.label}
+                                        </NavigationMenuLink>
+                                    </Link>
+                                </NavigationMenuItem>
+                            );
+                        })}
+                    </NavigationMenuList>
+                </NavigationMenu>
                 {mode === "words" && numberOfWords && (
                     <div className="mx-auto">
                         <ButtonGroup>

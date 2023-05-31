@@ -11,6 +11,9 @@ import { useMemo, useCallback } from "react";
  */
 export function useQueryString({ callback }: { callback?: () => void }): {
     redirectWithQs: (kvArray: { key: string; value: string }[]) => void;
+    createQueryStringWithUrl: (
+        kvArray: { key: string; value: string }[]
+    ) => string;
     params: URLSearchParams;
 } {
     const router = useRouter();
@@ -59,5 +62,5 @@ export function useQueryString({ callback }: { callback?: () => void }): {
         [callback, createQueryStringWithUrl, router]
     );
 
-    return { redirectWithQs, params };
+    return { redirectWithQs, createQueryStringWithUrl, params };
 }
