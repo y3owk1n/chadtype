@@ -1028,25 +1028,25 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@t3-oss/env-core@npm:0.3.1":
-  version: 0.3.1
-  resolution: "@t3-oss/env-core@npm:0.3.1"
+"@t3-oss/env-core@npm:0.4.0":
+  version: 0.4.0
+  resolution: "@t3-oss/env-core@npm:0.4.0"
   peerDependencies:
     typescript: ">=4.7.2"
     zod: ^3.0.0
-  checksum: 054f76e11522f6c6e07aa558f2fb325e9b05f83d13c8963ca3bb0cf3a398d54aec46c38c9ff7be9d08c8d05a11c5b221406f3908bf5c95517fe45756fc7df818
+  checksum: f299a28d8721f3d369929920c436fbff0b11966ba1e482f9438f48f9fec4d342e7a1f8a3015dc70da77326c0516afb8c7b70d51e81edbd79502dc0fe518520ca
   languageName: node
   linkType: hard
 
-"@t3-oss/env-nextjs@npm:^0.3.1":
-  version: 0.3.1
-  resolution: "@t3-oss/env-nextjs@npm:0.3.1"
+"@t3-oss/env-nextjs@npm:^0.4.0":
+  version: 0.4.0
+  resolution: "@t3-oss/env-nextjs@npm:0.4.0"
   dependencies:
-    "@t3-oss/env-core": 0.3.1
+    "@t3-oss/env-core": 0.4.0
   peerDependencies:
     typescript: ">=4.7.2"
     zod: ^3.0.0
-  checksum: 3df43671191390b282e358e49c8d1722bd26defacefa3a50e5e17945d7cf29671bba478662edf03749bf5b17119f3228c57c5a18c4c483bb0906dbe1a7e105ba
+  checksum: edc2d788e6311019b1f1a1e913acd2647778cb075a37647e192f48e200734f9b2cd8533d100ce2c4aa6d71e2eaff0d6cd610e38f342aaaca67047f903499acf6
   languageName: node
   linkType: hard
 
@@ -1783,7 +1783,7 @@ __metadata:
     "@radix-ui/react-slot": ^1.0.2
     "@radix-ui/react-toggle": ^1.0.3
     "@radix-ui/react-tooltip": ^1.0.6
-    "@t3-oss/env-nextjs": ^0.3.1
+    "@t3-oss/env-nextjs": ^0.4.0
     "@trivago/prettier-plugin-sort-imports": ^4.1.1
     "@types/eslint": ^8.40.0
     "@types/html-escaper": ^3.0.0
