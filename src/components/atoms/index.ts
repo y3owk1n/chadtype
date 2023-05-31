@@ -5,3 +5,4 @@ export * from "./ButtonGroup";
 export * from "./Toggle";
 export * from "./Separator";
 export * from "./NavigationMenu";
+export * from "./Skeleton";
