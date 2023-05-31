@@ -7,7 +7,6 @@ import { ExternalLinkIcon, RotateCw } from "lucide-react";
 import Link from "next/link";
 import { useRef } from "react";
 import { useInView } from "react-intersection-observer";
-import { Z_UNKNOWN } from "zlib";
 
 import {
     Badge,
@@ -99,7 +98,7 @@ export function TypingLines({
         },
     });
 
-    const { redirectWithQs, createQueryStringWithUrl } = useQueryString({
+    const { redirectWithQs } = useQueryString({
         callback: restart,
     });
 
@@ -114,19 +113,23 @@ export function TypingLines({
                                 query = {
                                     mode: menu.mode,
                                     numberOfWords: menu.numberOfWords,
+                                    id: crypto.randomUUID(),
                                 };
                             } else {
                                 query = {
                                     mode: menu.mode,
+                                    id: crypto.randomUUID(),
                                 };
                             }
                             return (
                                 <NavigationMenuItem key={menu.label}>
                                     <Link
+                                        prefetch={false}
                                         href={{
                                             pathname: menu.pathname,
                                             query,
                                         }}
+                                        onClick={restart}
                                     >
                                         <NavigationMenuLink
                                             active={mode === menu.mode}
