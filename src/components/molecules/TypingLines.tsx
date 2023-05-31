@@ -1,7 +1,6 @@
 "use client";
 
 import { type GenerateWordOptions, useTypeContext } from "@/lib";
-import { useQueryString } from "@/lib/hooks/useQueryString";
 import { cn } from "@/utils";
 import { ExternalLinkIcon, RotateCw } from "lucide-react";
 import Link from "next/link";
@@ -10,8 +9,6 @@ import { useInView } from "react-intersection-observer";
 
 import {
     Badge,
-    Button,
-    ButtonGroup,
     NavigationMenu,
     NavigationMenuItem,
     NavigationMenuLink,
@@ -60,6 +57,33 @@ const modeMenu: ModeMenu[] = [
     },
 ];
 
+const wordsMenu: ModeMenu[] = [
+    {
+        pathname: "/",
+        mode: "words",
+        numberOfWords: 10,
+        label: "10",
+    },
+    {
+        pathname: "/",
+        mode: "words",
+        numberOfWords: 30,
+        label: "30",
+    },
+    {
+        pathname: "/",
+        mode: "words",
+        numberOfWords: 50,
+        label: "50",
+    },
+    {
+        pathname: "/",
+        mode: "words",
+        numberOfWords: 100,
+        label: "100",
+    },
+];
+
 export function TypingLines({
     text,
     title,
@@ -98,13 +122,9 @@ export function TypingLines({
         },
     });
 
-    const { redirectWithQs } = useQueryString({
-        callback: restart,
-    });
-
     return (
         <div className=" grid w-full max-w-4xl gap-8 ">
-            <div className="grid w-full gap-2">
+            <div className="mx-auto flex w-fit gap-4 rounded-md border p-2">
                 <NavigationMenu>
                     <NavigationMenuList>
                         {modeMenu.map((menu) => {
@@ -123,105 +143,71 @@ export function TypingLines({
                             }
                             return (
                                 <NavigationMenuItem key={menu.label}>
-                                    <Link
-                                        prefetch={false}
-                                        href={{
-                                            pathname: menu.pathname,
-                                            query,
-                                        }}
-                                        onClick={restart}
+                                    <NavigationMenuLink
+                                        asChild
+                                        active={mode === menu.mode}
+                                        className={cn(
+                                            navigationMenuTriggerStyle(),
+                                            "h-auto px-2 py-1 text-xs"
+                                        )}
                                     >
-                                        <NavigationMenuLink
-                                            active={mode === menu.mode}
-                                            className={navigationMenuTriggerStyle()}
+                                        <Link
+                                            prefetch={false}
+                                            href={{
+                                                pathname: menu.pathname,
+                                                query,
+                                            }}
+                                            onClick={restart}
                                         >
                                             {menu.label}
-                                        </NavigationMenuLink>
-                                    </Link>
+                                        </Link>
+                                    </NavigationMenuLink>
                                 </NavigationMenuItem>
                             );
                         })}
                     </NavigationMenuList>
                 </NavigationMenu>
                 {mode === "words" && numberOfWords && (
-                    <div className="mx-auto">
-                        <ButtonGroup>
-                            <Button
-                                className="text-xs"
-                                variant={
-                                    numberOfWords === 10 ? "default" : "outline"
-                                }
-                                size="sm"
-                                onClick={() =>
-                                    redirectWithQs([
-                                        { key: "mode", value: "words" },
-                                        {
-                                            key: "numberOfWords",
-                                            value: "10",
-                                        },
-                                    ])
-                                }
-                            >
-                                10
-                            </Button>
-                            <Button
-                                className="text-xs"
-                                variant={
-                                    numberOfWords === 30 ? "default" : "outline"
-                                }
-                                size="sm"
-                                onClick={() =>
-                                    redirectWithQs([
-                                        { key: "mode", value: "words" },
-                                        {
-                                            key: "numberOfWords",
-                                            value: "30",
-                                        },
-                                    ])
-                                }
-                            >
-                                30
-                            </Button>
-                            <Button
-                                className="text-xs"
-                                variant={
-                                    numberOfWords === 50 ? "default" : "outline"
-                                }
-                                size="sm"
-                                onClick={() =>
-                                    redirectWithQs([
-                                        { key: "mode", value: "words" },
-                                        {
-                                            key: "numberOfWords",
-                                            value: "50",
-                                        },
-                                    ])
-                                }
-                            >
-                                50
-                            </Button>
-                            <Button
-                                className="text-xs"
-                                variant={
-                                    numberOfWords === 100
-                                        ? "default"
-                                        : "outline"
-                                }
-                                size="sm"
-                                onClick={() =>
-                                    redirectWithQs([
-                                        { key: "mode", value: "words" },
-                                        {
-                                            key: "numberOfWords",
-                                            value: "100",
-                                        },
-                                    ])
-                                }
-                            >
-                                100
-                            </Button>
-                        </ButtonGroup>
-                    </div>
+                    <>
+                        <Separator orientation="vertical" />
+                        <NavigationMenu>
+                            <NavigationMenuList>
+                                {wordsMenu.map((menu) => {
+                                    return (
+                                        <NavigationMenuItem key={menu.label}>
+                                            <NavigationMenuLink
+                                                asChild
+                                                active={
+                                                    numberOfWords ===
+                                                    menu.numberOfWords
+                                                }
+                                                className={cn(
+                                                    navigationMenuTriggerStyle(),
+                                                    "h-auto px-2 py-1 text-xs"
+                                                )}
+                                            >
+                                                <Link
+                                                    prefetch={false}
+                                                    href={{
+                                                        pathname: menu.pathname,
+                                                        query: {
+                                                            mode: menu.mode,
+                                                            numberOfWords:
+                                                                menu.numberOfWords,
+                                                            id: crypto.randomUUID(),
+                                                        },
+                                                    }}
+                                                    onClick={restart}
+                                                >
+                                                    {menu.label}
+                                                </Link>
+                                            </NavigationMenuLink>
+                                        </NavigationMenuItem>
+                                    );
+                                })}
+                            </NavigationMenuList>
+                        </NavigationMenu>
+                    </>
                 )}
             </div>
 
