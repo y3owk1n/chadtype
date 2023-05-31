@@ -1,4 +1,4 @@
-import { TypingContainerServer } from "@/components";
+import { TypingContainerServer, TypingSkeleton } from "@/components";
 import { type Metadata } from "next";
 import { Suspense } from "react";
 
@@ -15,7 +15,7 @@ interface PageProps {
 export default function Page({ searchParams }: PageProps) {
     return (
         <div className="grid h-screen place-items-center">
-            <Suspense fallback={<p>Loading...</p>}>
+            <Suspense fallback={<TypingSkeleton />}>
                 {/* @ts-expect-error Async Server Component */}
                 <TypingContainerServer searchParams={searchParams} />
             </Suspense>

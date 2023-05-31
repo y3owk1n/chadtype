@@ -5,3 +5,4 @@ export * from "./TypingHeader";
 export * from "./TypingLines";
 export * from "./TypingStatistics";
 export * from "./TypingFooter";
+export * from "./TypingSkeleton";
