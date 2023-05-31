@@ -19,6 +19,6 @@ Check it out here 👉🏻 [Official Site](https://chadtype.k92.gg)
 
 ### Todo
 
-[ ] Authentications
-[ ] Allow to save and share scores
-[ ] Showing statistics
+- [ ] Authentications
+- [ ] Allow to save and share scores
+- [ ] Showing statistics
