@@ -1,13 +1,14 @@
-import { TypingLines } from "@/components";
 import { type GenerateWordOptions, generateWords } from "@/lib";
 
-interface TypingLinesServerProps {
+import { TypingContainer } from "./TypingContainerClient";
+
+interface TypingContainerServerProps {
     searchParams?: { [key: string]: string | string[] | undefined };
 }
 
-export async function TypingLinesServer({
+export async function TypingContainerServer({
     searchParams,
-}: TypingLinesServerProps) {
+}: TypingContainerServerProps) {
     const paramsMode = (searchParams?.mode ||
         "wikipedia") as GenerateWordOptions["mode"];
 
@@ -21,12 +22,14 @@ export async function TypingLinesServer({
     );
 
     return (
-        <TypingLines
-            text={sectionText}
-            title={sectionTitle}
-            url={sectionUrl}
-            mode={mode}
-            numberOfWords={Number(paramsNumberOfWords)}
-        />
+        <div className=" grid w-full max-w-4xl gap-8 ">
+            <TypingContainer
+                mode={mode}
+                text={sectionText}
+                title={sectionTitle}
+                url={sectionUrl}
+                numberOfWords={paramsNumberOfWords}
+            />
+        </div>
     );
 }
