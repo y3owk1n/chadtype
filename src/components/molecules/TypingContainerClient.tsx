@@ -47,7 +47,7 @@ export function TypingContainer({
                 numberOfWords={numberOfWords}
             />
 
-            <div className="grid gap-8">
+            <div className="grid gap-2">
                 <TypingHeader
                     isTypingEnd={isTypingEnd}
                     startTyping={startTyping}
@@ -66,19 +66,19 @@ export function TypingContainer({
                         errorIndexBeforeCurrentCharacter
                     }
                 />
-                <TypingStatistics
-                    text={text}
-                    wpm={wpm}
-                    accuracy={accuracy}
-                    totalDuration={totalDuration}
-                    currentCharIndex={currentCharIndex}
-                />
-                <TypingFooter
-                    mode={mode}
-                    handleRestart={handleRestart}
-                    isTypingEnd={isTypingEnd}
-                />
             </div>
+            <TypingStatistics
+                text={text}
+                wpm={wpm}
+                accuracy={accuracy}
+                totalDuration={totalDuration}
+                currentCharIndex={currentCharIndex}
+            />
+            <TypingFooter
+                mode={mode}
+                handleRestart={handleRestart}
+                isTypingEnd={isTypingEnd}
+            />
         </>
     );
 }
