@@ -3,6 +3,7 @@
 import { Button, buttonVariants } from "@/components";
 import { cn } from "@/utils";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 export default function Error({
     error,
@@ -11,6 +12,8 @@ export default function Error({
     error: Error;
     reset: () => void;
 }) {
+    const router = useRouter();
+
     return (
         <div className="grid h-full min-h-[calc(100vh-80px-96px)] place-items-center">
             <div className="grid max-w-[42rem] gap-8 text-center">
@@ -28,6 +31,7 @@ export default function Error({
                                 variant: "outline",
                             })
                         )}
+                        onClick={() => router.refresh()}
                     >
                         Back To Home
                     </Link>
