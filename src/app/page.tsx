@@ -1,6 +1,6 @@
-import { TypingContainerServer, TypingSkeleton } from "@/components";
+import { TypingContainer } from "@/components";
+import { type GenerateWordsSchema, generateWords } from "@/lib";
 import { type Metadata } from "next";
-import { Suspense } from "react";
 
 export const metadata: Metadata = {
     title: "ChadType",
@@ -12,13 +12,34 @@ interface PageProps {
     searchParams?: { [key: string]: string | string[] | undefined };
 }
 
-export default function Page({ searchParams }: PageProps) {
+export default async function Page({ searchParams }: PageProps) {
+    const paramsMode = (searchParams?.mode ||
+        "words") as GenerateWordsSchema["mode"];
+
+    const paramsNumberOfWords =
+        typeof searchParams?.numberOfWords === "string"
+            ? searchParams?.numberOfWords
+            : "30";
+
+    const { sectionText, sectionTitle, sectionUrl, mode } = await generateWords(
+        {
+            mode: paramsMode,
+            numberOfWords:
+                paramsNumberOfWords as GenerateWordsSchema["numberOfWords"],
+        }
+    );
+
     return (
         <div className="grid h-full min-h-[calc(100vh-80px-96px)] place-items-center">
-            <Suspense fallback={<TypingSkeleton />}>
-                {/* @ts-expect-error Async Server Component */}
-                <TypingContainerServer searchParams={searchParams} />
-            </Suspense>
+            <div className=" grid w-full max-w-4xl gap-8 ">
+                <TypingContainer
+                    mode={mode}
+                    text={sectionText}
+                    title={sectionTitle}
+                    url={sectionUrl}
+                    numberOfWords={paramsNumberOfWords}
+                />
+            </div>
         </div>
     );
 }
