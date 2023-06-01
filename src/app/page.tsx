@@ -14,7 +14,7 @@ interface PageProps {
 
 export default function Page({ searchParams }: PageProps) {
     return (
-        <div className="grid h-[calc(100vh-80px-96px)] place-items-center">
+        <div className="grid h-full min-h-[calc(100vh-80px-96px)] place-items-center">
             <Suspense fallback={<TypingSkeleton />}>
                 {/* @ts-expect-error Async Server Component */}
                 <TypingContainerServer searchParams={searchParams} />
