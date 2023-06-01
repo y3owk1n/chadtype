@@ -4,6 +4,8 @@ import { cn } from "@/utils";
 import Link from "next/link";
 import * as React from "react";
 
+import { Icons } from "../icons";
+
 interface MobileNavProps {
     items: MainNavItem[];
     children?: React.ReactNode;
@@ -23,7 +25,7 @@ export function MobileNav({ items, children }: MobileNavProps) {
                     href="/"
                     className="flex items-center space-x-2"
                 >
-                    {/* <Icons.logo /> */}
+                    <Icons.logoHorizontal className="h-4" />
                     <span className="font-bold">{siteConfig.name}</span>
                 </Link>
                 <nav className="grid grid-flow-row auto-rows-max text-sm">
