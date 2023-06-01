@@ -1,12 +1,5 @@
 import { TypingContainer } from "@/components";
 import { type GenerateWordsSchema, generateWords } from "@/lib";
-import { type Metadata } from "next";
-
-export const metadata: Metadata = {
-    title: "ChadType",
-    description:
-        "Welcome to ChadType - a minimalist typing game designed for chads!",
-};
 
 interface PageProps {
     searchParams?: { [key: string]: string | string[] | undefined };
