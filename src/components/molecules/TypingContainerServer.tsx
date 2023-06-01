@@ -1,4 +1,4 @@
-import { type GenerateWordOptions, generateWords } from "@/lib";
+import { type GenerateWordsSchema, generateWords } from "@/lib";
 
 import { TypingContainer } from "./TypingContainerClient";
 
@@ -10,14 +10,18 @@ export async function TypingContainerServer({
     searchParams,
 }: TypingContainerServerProps) {
     const paramsMode = (searchParams?.mode ||
-        "wikipedia") as GenerateWordOptions["mode"];
+        "wikipedia") as GenerateWordsSchema["mode"];
 
-    const paramsNumberOfWords = searchParams?.numberOfWords || 30;
+    const paramsNumberOfWords =
+        typeof searchParams?.numberOfWords === "string"
+            ? searchParams?.numberOfWords
+            : "30";
 
     const { sectionText, sectionTitle, sectionUrl, mode } = await generateWords(
         {
             mode: paramsMode,
-            numberOfWords: Number(paramsNumberOfWords),
+            numberOfWords:
+                paramsNumberOfWords as GenerateWordsSchema["numberOfWords"],
         }
     );
 
@@ -28,7 +32,7 @@ export async function TypingContainerServer({
                 text={sectionText}
                 title={sectionTitle}
                 url={sectionUrl}
-                numberOfWords={Number(paramsNumberOfWords)}
+                numberOfWords={paramsNumberOfWords}
             />
         </div>
     );
