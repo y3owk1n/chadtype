@@ -23,8 +23,8 @@ export function MainNav({ items, children }: MainNavProps) {
                 href="/"
                 className="hidden items-center space-x-2 md:flex"
             >
-                {/* <Icons.logo /> */}
-                <span className="hidden font-bold sm:inline-block">
+                <Icons.logoHorizontal className="h-4" />
+                <span className="sr-only hidden font-bold sm:inline-block">
                     {siteConfig.name}
                 </span>
             </Link>
