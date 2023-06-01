@@ -6,3 +6,5 @@ export * from "./TypingLines";
 export * from "./TypingStatistics";
 export * from "./TypingFooter";
 export * from "./TypingSkeleton";
+export * from "./MainNav";
+export * from "./MobilNav";
