@@ -59,11 +59,12 @@ export function TypingLines({
                                 errorIndexBeforeCurrentCharacter.find(
                                     (errorIndex) =>
                                         errorIndex === index && word !== " "
-                                ) && "text-red-500",
+                                ) && "text-red-500 dark:text-red-300",
                                 errorIndexBeforeCurrentCharacter.find(
                                     (errorIndex) =>
                                         errorIndex === index && word === " "
-                                ) && "bg-red-500"
+                                ) &&
+                                    "border-b border-red-500 dark:border-red-300"
                             )}
                         >
                             {word}
