@@ -12,12 +12,12 @@ export async function TypingContainerServer({
     const paramsMode = (searchParams?.mode ||
         "wikipedia") as GenerateWordOptions["mode"];
 
-    const paramsNumberOfWords = (searchParams?.numberOfWords || 30) as number;
+    const paramsNumberOfWords = searchParams?.numberOfWords || 30;
 
     const { sectionText, sectionTitle, sectionUrl, mode } = await generateWords(
         {
             mode: paramsMode,
-            numberOfWords: paramsNumberOfWords,
+            numberOfWords: Number(paramsNumberOfWords),
         }
     );
 
@@ -28,7 +28,7 @@ export async function TypingContainerServer({
                 text={sectionText}
                 title={sectionTitle}
                 url={sectionUrl}
-                numberOfWords={paramsNumberOfWords}
+                numberOfWords={Number(paramsNumberOfWords)}
             />
         </div>
     );
