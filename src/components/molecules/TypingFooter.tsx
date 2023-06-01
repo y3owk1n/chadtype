@@ -1,6 +1,6 @@
 "use client";
 
-import { type GenerateWordOptions, type useTypeContext } from "@/lib";
+import { type GenerateWordsSchema, type useTypeContext } from "@/lib";
 import { cn } from "@/utils";
 import { ExternalLinkIcon, RotateCw } from "lucide-react";
 
@@ -14,7 +14,7 @@ import {
 
 interface TypingFooterProps {
     url?: string;
-    mode: GenerateWordOptions["mode"];
+    mode: GenerateWordsSchema["mode"];
     handleRestart: ReturnType<typeof useTypeContext>["handleRestart"];
     isTypingEnd: ReturnType<typeof useTypeContext>["isTypingEnd"];
 }

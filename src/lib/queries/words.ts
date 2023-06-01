@@ -8,6 +8,8 @@ import {
 } from "@/utils";
 import { promises as fs } from "fs";
 import path from "path";
+import { ZodError, z } from "zod";
+import { fromZodError } from "zod-validation-error";
 
 interface WikipediaSummary {
     title: string;
@@ -54,29 +56,47 @@ interface RandomWord {
     text: string;
 }
 
-export interface GenerateWordOptions {
-    mode: "wikipedia" | "quotes" | "words";
-    numberOfWords?: number;
-}
-
 interface GenerateWordData {
     sectionTitle?: string;
     sectionText: string;
     sectionUrl?: string;
-    mode: GenerateWordOptions["mode"];
+    mode: GenerateWordsSchema["mode"];
 }
+
+const generateWordsSchema = z.object({
+    mode: z.enum(["wikipedia", "quotes", "words"]),
+    numberOfWords: z.enum(["10", "30", "50", "100"]),
+});
+
+export type GenerateWordsSchema = z.infer<typeof generateWordsSchema>;
 
 export async function generateWords({
     mode,
     numberOfWords,
-}: GenerateWordOptions): Promise<GenerateWordData> {
+}: GenerateWordsSchema): Promise<GenerateWordData> {
+    try {
+        await generateWordsSchema.parseAsync({
+            mode,
+            numberOfWords,
+        });
+    } catch (error) {
+        if (error instanceof ZodError) {
+            const validationError = fromZodError(error);
+            throw new Error(validationError.message, {
+                cause: validationError.cause,
+            });
+        }
+    }
+
     switch (mode) {
         case "wikipedia":
             return await getRandomWikipediaSummary();
         case "quotes":
             return await getRandomQuotes();
         case "words":
-            return await getRandomWords({ numberOfWords: numberOfWords || 30 });
+            return await getRandomWords({
+                numberOfWords: Number(numberOfWords) || 30,
+            });
     }
 }
 

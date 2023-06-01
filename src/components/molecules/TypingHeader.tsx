@@ -1,6 +1,6 @@
 "use client";
 
-import { type useTypeContext, type GenerateWordOptions } from "@/lib";
+import { type useTypeContext, type GenerateWordsSchema } from "@/lib";
 import { cn } from "@/utils";
 import { ExternalLinkIcon } from "lucide-react";
 
@@ -9,8 +9,8 @@ import { Badge, Separator, badgeVariants } from "../atoms";
 interface TypingHeaderProps {
     title?: string;
     url?: string;
-    mode: GenerateWordOptions["mode"];
-    numberOfWords: number;
+    mode: GenerateWordsSchema["mode"];
+    numberOfWords: string;
     isTypingEnd: ReturnType<typeof useTypeContext>["isTypingEnd"];
     startTyping: ReturnType<typeof useTypeContext>["startTyping"];
 }

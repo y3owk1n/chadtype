@@ -1,6 +1,6 @@
 "use client";
 
-import { type GenerateWordOptions, useTypeContext } from "@/lib";
+import { type GenerateWordsSchema, useTypeContext } from "@/lib";
 
 import { TypingFooter } from "./TypingFooter";
 import { TypingHeader } from "./TypingHeader";
@@ -12,8 +12,8 @@ interface TypingContainerProps {
     text: string;
     title?: string;
     url?: string;
-    mode: GenerateWordOptions["mode"];
-    numberOfWords: number;
+    mode: GenerateWordsSchema["mode"];
+    numberOfWords: string;
 }
 
 export function TypingContainer({

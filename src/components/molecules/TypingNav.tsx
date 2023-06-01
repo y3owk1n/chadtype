@@ -1,6 +1,6 @@
 "use client";
 
-import { type useTypeContext, type GenerateWordOptions } from "@/lib";
+import { type useTypeContext, type GenerateWordsSchema } from "@/lib";
 import { cn } from "@/utils";
 import Link from "next/link";
 
@@ -15,15 +15,15 @@ import {
 
 interface TypingNavProps {
     text: string;
-    mode: GenerateWordOptions["mode"];
-    numberOfWords: number;
+    mode: GenerateWordsSchema["mode"];
+    numberOfWords: string;
     restart: ReturnType<typeof useTypeContext>["restart"];
 }
 
 interface ModeMenu {
     pathname: string;
-    mode: GenerateWordOptions["mode"];
-    numberOfWords?: GenerateWordOptions["numberOfWords"];
+    mode: GenerateWordsSchema["mode"];
+    numberOfWords?: GenerateWordsSchema["numberOfWords"];
     label: string;
 }
 
@@ -42,7 +42,7 @@ const modeMenu: ModeMenu[] = [
         pathname: "/",
         mode: "words",
         label: "Words",
-        numberOfWords: 30,
+        numberOfWords: "30",
     },
 ];
 
@@ -50,25 +50,25 @@ const wordsMenu: ModeMenu[] = [
     {
         pathname: "/",
         mode: "words",
-        numberOfWords: 10,
+        numberOfWords: "10",
         label: "10",
     },
     {
         pathname: "/",
         mode: "words",
-        numberOfWords: 30,
+        numberOfWords: "30",
         label: "30",
     },
     {
         pathname: "/",
         mode: "words",
-        numberOfWords: 50,
+        numberOfWords: "50",
         label: "50",
     },
     {
         pathname: "/",
         mode: "words",
-        numberOfWords: 100,
+        numberOfWords: "100",
         label: "100",
     },
 ];
