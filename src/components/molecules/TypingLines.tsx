@@ -55,7 +55,7 @@ export function TypingLines({
                         <span
                             key={`${word}-${index}`}
                             className={cn(
-                                "text-gray-800",
+                                "text-gray-800 dark:text-gray-300",
                                 errorIndexBeforeCurrentCharacter.find(
                                     (errorIndex) =>
                                         errorIndex === index && word !== " "
@@ -72,7 +72,7 @@ export function TypingLines({
                 <span
                     ref={ref}
                     className={cn(
-                        " text-gray-300",
+                        " text-gray-300 dark:text-gray-800",
                         isTypingEnd() || !startTyping ? "" : "animate-blink"
                     )}
                 >
@@ -83,7 +83,7 @@ export function TypingLines({
                     wordsAfterCurrentCharacter.map((word, index) => (
                         <span
                             key={`${word}-${index}`}
-                            className={cn("text-gray-300")}
+                            className={cn("text-gray-300 dark:text-gray-800")}
                         >
                             {word}
                         </span>
