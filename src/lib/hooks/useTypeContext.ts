@@ -1,25 +1,13 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 import { useKeyPress } from "./useKeyPress";
 
-const ignoreKeys = [
-    "Shift",
-    "Meta",
-    "Alt",
-    "Control",
-    "Escape",
-    "Tab",
-    "ArrowDown",
-    "ArrowUp",
-    "ArrowRight",
-    "ArrowLeft",
-    "Enter",
-];
-
 export function useTypeContext({ text }: { text: string }) {
+    const inputRef = useRef<HTMLInputElement>(null);
+
     const [currentCharIndex, setCurrentCharIndex] = useState(0);
     const [startTime, setStartTime] = useState<number | null>(null);
     const [currentWord, setCurrentWord] = useState(0);
@@ -57,52 +45,96 @@ export function useTypeContext({ text }: { text: string }) {
         }
     }, [currentCharIndex, errorIndex]);
 
-    useKeyPress((key) => {
-        if (!startTyping && key === "Enter") {
-            setStartTyping(true);
+    const inputCharArr: string[] = inputRef.current?.value.split("") || [];
+
+    const inputCharLength = inputCharArr.length;
+    const lastIndex = inputCharLength - 1;
+
+    const latestChar = inputCharArr[currentCharIndex];
+
+    const currentChar = text[currentCharIndex];
+
+    useEffect(() => {
+        if (!startTime || !startTyping) {
+            if (inputRef.current) {
+                inputRef.current.disabled = true;
+            }
+            return;
         }
 
-        if (isTypingEnd()) return;
+        const durationInMinutes = (currentTime() - startTime) / 60000.0;
 
-        if (!startTime) setStartTime(currentTime());
+        const wpm = currentCharIndex / durationInMinutes / 5;
 
-        const currentChar = text[currentCharIndex];
+        setWpm(wpm);
+        setAuccuracy(calculateAccuracy());
+        setTotalDuration(durationInMinutes);
 
-        if (startTime && startTyping && !ignoreKeys.includes(key)) {
-            // Set errors
-            if (key.length === 1 && key !== currentChar) {
+        // If havent start typing yet
+        if (!latestChar && inputCharLength === currentCharIndex) return;
+
+        // If finished typing
+        if (inputCharLength === text.length) {
+            if (inputRef.current) {
+                inputRef.current.disabled = true;
+            }
+        }
+
+        // If typing...
+        if (inputCharLength < currentCharIndex) {
+            // backspace mode
+            if (currentChar === " ") {
+                if (currentWord > 0) {
+                    setCurrentWord((prev) => prev - 1);
+                }
+            }
+            setCurrentCharIndex((prev) => prev - 1);
+            handleErrors();
+        } else {
+            // forward mode
+            setCurrentCharIndex(lastIndex + 1);
+
+            if (latestChar !== currentChar) {
                 setErrorIndex((prev) => [...prev, currentCharIndex]);
+                return;
             }
 
             // Set complete single words with space
-            if (key === " ") {
+            if (latestChar === " ") {
                 setCurrentWord((prev) => prev + 1);
+                return;
             }
+        }
 
-            // Handle backspace
-            if (currentCharIndex > 0 && key === "Backspace") {
-                if (text[currentCharIndex] === " ") {
-                    if (currentWord > 0) {
-                        setCurrentWord((prev) => prev - 1);
-                    }
-                }
-                setCurrentCharIndex((prev) => prev - 1);
-                handleErrors();
-            } else {
-                setCurrentCharIndex((prev) => prev + 1);
+        return;
+    }, [
+        startTime,
+        startTyping,
+        currentCharIndex,
+        latestChar,
+        inputCharLength,
+        text,
+        currentChar,
+        currentWord,
+        lastIndex,
+    ]);
+
+    useKeyPress((key) => {
+        // Press enter key to start
+        if (!startTyping && key === "Enter") {
+            if (inputRef.current) {
+                setStartTyping(true);
+                setStartTime(currentTime());
+                inputRef.current.disabled = false;
+                inputRef.current.focus();
             }
-
-            const durationInMinutes = (currentTime() - startTime) / 60000.0;
-
-            const wpm = currentCharIndex / durationInMinutes / 5;
-
-            setWpm(wpm);
-            setAuccuracy(calculateAccuracy());
-            setTotalDuration(durationInMinutes);
         }
     });
 
     const restart = () => {
+        if (inputRef.current) {
+            inputRef.current.value = "";
+        }
         setAuccuracy(0);
         setCurrentCharIndex(0);
         setCurrentWord(0);
@@ -130,6 +162,7 @@ export function useTypeContext({ text }: { text: string }) {
         .split("");
 
     return {
+        inputRef,
         wordsBeforeCurrentCharacter,
         currentCharacter,
         wordsAfterCurrentCharacter,
