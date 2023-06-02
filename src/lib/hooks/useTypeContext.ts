@@ -5,6 +5,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 
 import { type GenerateWordsSchema } from "../queries";
 import { useKeyPress } from "./useKeyPress";
+import { usePageLeave } from "./usePageLeave";
 
 interface TypeContextOptions {
     text: string;
@@ -156,6 +157,10 @@ export function useTypeContext({ text, mode }: TypeContextOptions) {
         if (key === "Enter") {
             startTypingGame();
         }
+    });
+
+    usePageLeave(() => {
+        setIsFocus(false);
     });
 
     useEffect(() => {
