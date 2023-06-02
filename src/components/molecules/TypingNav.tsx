@@ -9,6 +9,7 @@ import {
     NavigationMenuItem,
     NavigationMenuLink,
     NavigationMenuList,
+    ScrollArea,
     Separator,
     navigationMenuTriggerStyle,
 } from "../atoms";
@@ -75,7 +76,7 @@ const wordsMenu: ModeMenu[] = [
 
 export function TypingNav({ mode, numberOfWords, restart }: TypingNavProps) {
     return (
-        <div className="mx-auto flex w-fit gap-4 rounded-md border p-2">
+        <ScrollArea className="mx-auto flex h-full w-full gap-4 rounded-md border p-2 md:w-fit">
             <NavigationMenu>
                 <NavigationMenuList>
                     {modeMenu.map((menu) => {
@@ -116,13 +117,13 @@ export function TypingNav({ mode, numberOfWords, restart }: TypingNavProps) {
                             </NavigationMenuItem>
                         );
                     })}
-                </NavigationMenuList>
-            </NavigationMenu>
-            {mode === "words" && numberOfWords && (
-                <>
-                    <Separator orientation="vertical" />
-                    <NavigationMenu>
-                        <NavigationMenuList>
+
+                    {mode === "words" && numberOfWords && (
+                        <>
+                            <Separator
+                                orientation="vertical"
+                                className="h-6"
+                            />
                             {wordsMenu.map((menu) => {
                                 return (
                                     <NavigationMenuItem key={menu.label}>
@@ -156,10 +157,10 @@ export function TypingNav({ mode, numberOfWords, restart }: TypingNavProps) {
                                     </NavigationMenuItem>
                                 );
                             })}
-                        </NavigationMenuList>
-                    </NavigationMenu>
-                </>
-            )}
-        </div>
+                        </>
+                    )}
+                </NavigationMenuList>
+            </NavigationMenu>
+        </ScrollArea>
     );
 }
