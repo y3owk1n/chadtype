@@ -195,21 +195,21 @@ export function TypingNav({ mode, numberOfWords, restart }: TypingNavProps) {
                                 };
                             }
                             return (
-                                <DropdownMenuCheckboxItem
+                                <Link
                                     key={menu.label}
-                                    checked={mode === menu.mode}
+                                    prefetch={false}
+                                    href={{
+                                        pathname: menu.pathname,
+                                        query,
+                                    }}
+                                    onClick={restart}
                                 >
-                                    <Link
-                                        prefetch={false}
-                                        href={{
-                                            pathname: menu.pathname,
-                                            query,
-                                        }}
-                                        onClick={restart}
+                                    <DropdownMenuCheckboxItem
+                                        checked={mode === menu.mode}
                                     >
                                         {menu.label}
-                                    </Link>
-                                </DropdownMenuCheckboxItem>
+                                    </DropdownMenuCheckboxItem>
+                                </Link>
                             );
                         })}
 
@@ -218,29 +218,29 @@ export function TypingNav({ mode, numberOfWords, restart }: TypingNavProps) {
                                 <DropdownMenuSeparator />
                                 {wordsMenu.map((menu) => {
                                     return (
-                                        <DropdownMenuCheckboxItem
+                                        <Link
                                             key={menu.label}
-                                            checked={
-                                                numberOfWords ===
-                                                menu.numberOfWords
-                                            }
+                                            prefetch={false}
+                                            href={{
+                                                pathname: menu.pathname,
+                                                query: {
+                                                    mode: menu.mode,
+                                                    numberOfWords:
+                                                        menu.numberOfWords,
+                                                    id: crypto.randomUUID(),
+                                                },
+                                            }}
+                                            onClick={restart}
                                         >
-                                            <Link
-                                                prefetch={false}
-                                                href={{
-                                                    pathname: menu.pathname,
-                                                    query: {
-                                                        mode: menu.mode,
-                                                        numberOfWords:
-                                                            menu.numberOfWords,
-                                                        id: crypto.randomUUID(),
-                                                    },
-                                                }}
-                                                onClick={restart}
+                                            <DropdownMenuCheckboxItem
+                                                checked={
+                                                    numberOfWords ===
+                                                    menu.numberOfWords
+                                                }
                                             >
                                                 {menu.label}
-                                            </Link>
-                                        </DropdownMenuCheckboxItem>
+                                            </DropdownMenuCheckboxItem>
+                                        </Link>
                                     );
                                 })}
                             </>
