@@ -8,6 +8,7 @@ import { useInView } from "react-intersection-observer";
 interface TypingLinesProps {
     startTypingGame: ReturnType<typeof useTypeContext>["startTypingGame"];
     inputRef: ReturnType<typeof useTypeContext>["inputRef"];
+    isFocus: ReturnType<typeof useTypeContext>["isFocus"];
     wordsBeforeCurrentCharacter: ReturnType<
         typeof useTypeContext
     >["wordsAfterCurrentCharacter"];
@@ -24,13 +25,13 @@ interface TypingLinesProps {
 export function TypingLines({
     startTypingGame,
     inputRef,
+    isFocus,
     wordsBeforeCurrentCharacter,
     currentCharacter,
     wordsAfterCurrentCharacter,
     progress,
     errorIndexBeforeCurrentCharacter,
 }: TypingLinesProps) {
-    const [isFocus, setIsFocus] = useState(false);
     const containerRef = useRef<HTMLDivElement>(null);
 
     const { ref } = useInView({
@@ -46,39 +47,6 @@ export function TypingLines({
             }
         },
     });
-
-    useEffect(() => {
-        const handleFocus = () => {
-            // Element has gained focus
-            setIsFocus(true);
-        };
-
-        const handleBlur = () => {
-            // Element has lost focus
-            setIsFocus(false);
-        };
-
-        const element = inputRef.current;
-
-        if (element) {
-            element.addEventListener("focus", handleFocus);
-            element.addEventListener("blur", handleBlur);
-        }
-
-        return () => {
-            if (element) {
-                element.removeEventListener("focus", handleFocus);
-                element.removeEventListener("blur", handleBlur);
-            }
-        };
-    }, [inputRef]);
-
-    const handleStartGame = () => {
-        startTypingGame();
-        inputRef.current?.focus();
-
-        return;
-    };
 
     return (
         <>
@@ -98,7 +66,7 @@ export function TypingLines({
             />
             <div
                 ref={containerRef}
-                onClick={handleStartGame}
+                onClick={startTypingGame}
                 className="relative h-24 overflow-hidden font-mono text-2xl"
             >
                 {!isFocus && progress === "STARTED" && (
