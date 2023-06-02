@@ -49,7 +49,7 @@ export function TypingContainer({
                 numberOfWords={numberOfWords}
             />
 
-            <div className="grid gap-2">
+            <div className="grid gap-4">
                 <TypingHeader
                     isTypingEnd={isTypingEnd}
                     startTyping={startTyping}
