@@ -24,6 +24,7 @@ export function TypingContainer({
     numberOfWords,
 }: TypingContainerProps) {
     const {
+        startTypingGame,
         inputRef,
         isTypingEnd,
         startTyping,
@@ -58,6 +59,7 @@ export function TypingContainer({
                     numberOfWords={numberOfWords}
                 />
                 <TypingLines
+                    startTypingGame={startTypingGame}
                     inputRef={inputRef}
                     wordsBeforeCurrentCharacter={wordsBeforeCurrentCharacter}
                     currentCharacter={currentCharacter}

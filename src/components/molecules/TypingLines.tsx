@@ -2,10 +2,11 @@
 
 import { type useTypeContext } from "@/lib";
 import { cn } from "@/utils";
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useInView } from "react-intersection-observer";
 
 interface TypingLinesProps {
+    startTypingGame: ReturnType<typeof useTypeContext>["startTypingGame"];
     inputRef: ReturnType<typeof useTypeContext>["inputRef"];
     wordsBeforeCurrentCharacter: ReturnType<
         typeof useTypeContext
@@ -22,6 +23,7 @@ interface TypingLinesProps {
 }
 
 export function TypingLines({
+    startTypingGame,
     inputRef,
     wordsBeforeCurrentCharacter,
     currentCharacter,
@@ -30,6 +32,7 @@ export function TypingLines({
     startTyping,
     errorIndexBeforeCurrentCharacter,
 }: TypingLinesProps) {
+    const [isFocus, setIsFocus] = useState(false);
     const containerRef = useRef<HTMLDivElement>(null);
 
     const { ref } = useInView({
@@ -45,6 +48,41 @@ export function TypingLines({
             }
         },
     });
+
+    useEffect(() => {
+        const handleFocus = () => {
+            // Element has gained focus
+            console.log("Element focused");
+            setIsFocus(true);
+        };
+
+        const handleBlur = () => {
+            // Element has lost focus
+            console.log("Element blurred");
+            setIsFocus(false);
+        };
+
+        const element = inputRef.current;
+
+        if (element) {
+            element.addEventListener("focus", handleFocus);
+            element.addEventListener("blur", handleBlur);
+        }
+
+        return () => {
+            if (element) {
+                element.removeEventListener("focus", handleFocus);
+                element.removeEventListener("blur", handleBlur);
+            }
+        };
+    }, [inputRef]);
+
+    const handleStartGame = () => {
+        startTypingGame();
+        inputRef.current?.focus();
+
+        return;
+    };
 
     return (
         <>
@@ -64,8 +102,19 @@ export function TypingLines({
             />
             <div
                 ref={containerRef}
-                className="h-24 overflow-hidden font-mono text-2xl"
+                onClick={handleStartGame}
+                className="relative h-24 overflow-hidden font-mono text-2xl"
             >
+                {!isFocus && startTyping && !isTypingEnd() && (
+                    <div
+                        onClick={() => {
+                            inputRef.current?.focus();
+                        }}
+                        className="absolute left-0 top-0 grid h-full w-full place-items-center backdrop-blur-sm"
+                    >
+                        Click here to continue typing
+                    </div>
+                )}
                 {wordsBeforeCurrentCharacter.length > 0 &&
                     wordsBeforeCurrentCharacter.map((word, index) => (
                         <span
@@ -90,7 +139,9 @@ export function TypingLines({
                     ref={ref}
                     className={cn(
                         " text-gray-300 dark:text-gray-800",
-                        isTypingEnd() || !startTyping ? "" : "animate-blink"
+                        isTypingEnd() || !startTyping || !isFocus
+                            ? ""
+                            : "animate-blink"
                     )}
                 >
                     {currentCharacter}

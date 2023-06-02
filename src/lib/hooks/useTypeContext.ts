@@ -45,6 +45,29 @@ export function useTypeContext({ text }: { text: string }) {
         }
     }, [currentCharIndex, errorIndex]);
 
+    const startTypingGame = useCallback(() => {
+        if (inputRef.current && !startTyping) {
+            setStartTyping(true);
+            setStartTime(currentTime());
+            inputRef.current.disabled = false;
+            inputRef.current.focus();
+        }
+    }, [currentTime, startTyping]);
+
+    const restart = useCallback(() => {
+        if (inputRef.current) {
+            inputRef.current.value = "";
+        }
+        setAuccuracy(0);
+        setCurrentCharIndex(0);
+        setCurrentWord(0);
+        setStartTime(null);
+        setWpm(0);
+        setTotalDuration(0);
+        setStartTyping(false);
+        setErrorIndex([]);
+    }, []);
+
     const inputCharArr: string[] = inputRef.current?.value.split("") || [];
 
     const inputCharLength = inputCharArr.length;
@@ -62,16 +85,14 @@ export function useTypeContext({ text }: { text: string }) {
             return;
         }
 
+        // If havent start typing yet
+        if (!latestChar && inputCharLength === currentCharIndex) return;
+
         const durationInMinutes = (currentTime() - startTime) / 60000.0;
-
         const wpm = currentCharIndex / durationInMinutes / 5;
-
         setWpm(wpm);
         setAuccuracy(calculateAccuracy());
         setTotalDuration(durationInMinutes);
-
-        // If havent start typing yet
-        if (!latestChar && inputCharLength === currentCharIndex) return;
 
         // If finished typing
         if (inputCharLength === text.length) {
@@ -121,29 +142,10 @@ export function useTypeContext({ text }: { text: string }) {
 
     useKeyPress((key) => {
         // Press enter key to start
-        if (!startTyping && key === "Enter") {
-            if (inputRef.current) {
-                setStartTyping(true);
-                setStartTime(currentTime());
-                inputRef.current.disabled = false;
-                inputRef.current.focus();
-            }
+        if (key === "Enter") {
+            startTypingGame();
         }
     });
-
-    const restart = () => {
-        if (inputRef.current) {
-            inputRef.current.value = "";
-        }
-        setAuccuracy(0);
-        setCurrentCharIndex(0);
-        setCurrentWord(0);
-        setStartTime(null);
-        setWpm(0);
-        setTotalDuration(0);
-        setStartTyping(false);
-        setErrorIndex([]);
-    };
 
     const handleRestart = () => {
         restart();
@@ -175,5 +177,6 @@ export function useTypeContext({ text }: { text: string }) {
         startTyping,
         errorIndexBeforeCurrentCharacter,
         restart,
+        startTypingGame,
     };
 }
