@@ -26,7 +26,7 @@ export function MobileNav({ items, children }: MobileNavProps) {
                     className="flex items-center space-x-2"
                 >
                     <Icons.logoHorizontal className="h-4" />
-                    <span className="font-bold">{siteConfig.name}</span>
+                    <span className="sr-only font-bold">{siteConfig.name}</span>
                 </Link>
                 <nav className="grid grid-flow-row auto-rows-max text-sm">
                     {items.map((item, index) => (
