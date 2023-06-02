@@ -43,7 +43,7 @@ export function TypingHeader({
                         >
                             Enter
                         </Badge>
-                        <span>to start typing</span>
+                        <span>or click any words to start typing</span>
                     </div>
                     <Separator orientation="vertical" />
                     {mode === "wikipedia" && (
