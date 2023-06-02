@@ -74,7 +74,7 @@ export function TypingLines({
                         onClick={() => {
                             inputRef.current?.focus();
                         }}
-                        className="absolute left-0 top-0 grid h-full w-full place-items-center backdrop-blur-sm"
+                        className="absolute left-0 top-0 grid h-full w-full place-items-center text-center backdrop-blur-sm"
                     >
                         Click here to continue typing
                     </div>
