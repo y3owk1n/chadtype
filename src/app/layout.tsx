@@ -13,6 +13,9 @@ const fontSans = FontSans({
 });
 
 export const metadata = {
+    metadataBase: new URL(siteConfig.url),
+    generator: "Next.js",
+    referrer: "origin-when-cross-origin",
     title: {
         default: siteConfig.name,
         template: `%s | ${siteConfig.name}`,
@@ -37,13 +40,11 @@ export const metadata = {
         title: siteConfig.name,
         description: siteConfig.description,
         siteName: siteConfig.name,
-        images: [`${siteConfig.url}/og.jpg`],
     },
     twitter: {
         card: "summary_large_image",
         title: siteConfig.name,
         description: siteConfig.description,
-        images: [`${siteConfig.url}/og.jpg`],
     },
     icons: {
         icon: [
@@ -74,6 +75,11 @@ export const metadata = {
         ],
     },
     manifest: `${siteConfig.url}/site.webmanifest`,
+    formatDetection: {
+        email: false,
+        address: false,
+        telephone: false,
+    },
 };
 
 export default function RootLayout({
