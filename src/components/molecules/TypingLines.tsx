@@ -15,8 +15,7 @@ interface TypingLinesProps {
     wordsAfterCurrentCharacter: ReturnType<
         typeof useTypeContext
     >["wordsAfterCurrentCharacter"];
-    isTypingEnd: ReturnType<typeof useTypeContext>["isTypingEnd"];
-    startTyping: ReturnType<typeof useTypeContext>["startTyping"];
+    progress: ReturnType<typeof useTypeContext>["progress"];
     errorIndexBeforeCurrentCharacter: ReturnType<
         typeof useTypeContext
     >["errorIndexBeforeCurrentCharacter"];
@@ -28,8 +27,7 @@ export function TypingLines({
     wordsBeforeCurrentCharacter,
     currentCharacter,
     wordsAfterCurrentCharacter,
-    isTypingEnd,
-    startTyping,
+    progress,
     errorIndexBeforeCurrentCharacter,
 }: TypingLinesProps) {
     const [isFocus, setIsFocus] = useState(false);
@@ -52,13 +50,11 @@ export function TypingLines({
     useEffect(() => {
         const handleFocus = () => {
             // Element has gained focus
-            console.log("Element focused");
             setIsFocus(true);
         };
 
         const handleBlur = () => {
             // Element has lost focus
-            console.log("Element blurred");
             setIsFocus(false);
         };
 
@@ -105,7 +101,7 @@ export function TypingLines({
                 onClick={handleStartGame}
                 className="relative h-24 overflow-hidden font-mono text-2xl"
             >
-                {!isFocus && startTyping && !isTypingEnd() && (
+                {!isFocus && progress === "STARTED" && (
                     <div
                         onClick={() => {
                             inputRef.current?.focus();
@@ -139,9 +135,7 @@ export function TypingLines({
                     ref={ref}
                     className={cn(
                         " text-gray-300 dark:text-gray-800",
-                        isTypingEnd() || !startTyping || !isFocus
-                            ? ""
-                            : "animate-blink"
+                        progress === "STARTED" && isFocus ? "animate-blink" : ""
                     )}
                 >
                     {currentCharacter}

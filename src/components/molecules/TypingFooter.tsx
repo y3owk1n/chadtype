@@ -16,16 +16,16 @@ interface TypingFooterProps {
     url?: string;
     mode: GenerateWordsSchema["mode"];
     handleRestart: ReturnType<typeof useTypeContext>["handleRestart"];
-    isTypingEnd: ReturnType<typeof useTypeContext>["isTypingEnd"];
+    progress: ReturnType<typeof useTypeContext>["progress"];
 }
 
 export function TypingFooter({
     url,
     mode,
     handleRestart,
-    isTypingEnd,
+    progress,
 }: TypingFooterProps) {
-    if (!isTypingEnd()) return null;
+    if (progress !== "END") return null;
 
     return (
         <div className="mx-auto flex items-center gap-2">

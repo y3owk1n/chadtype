@@ -11,8 +11,7 @@ interface TypingHeaderProps {
     url?: string;
     mode: GenerateWordsSchema["mode"];
     numberOfWords: string;
-    isTypingEnd: ReturnType<typeof useTypeContext>["isTypingEnd"];
-    startTyping: ReturnType<typeof useTypeContext>["startTyping"];
+    progress: ReturnType<typeof useTypeContext>["progress"];
 }
 
 export function TypingHeader({
@@ -20,16 +19,17 @@ export function TypingHeader({
     url,
     mode,
     numberOfWords,
-    startTyping,
-    isTypingEnd,
+    progress,
 }: TypingHeaderProps) {
     return (
         <div className="grid gap-4">
-            {startTyping || !isTypingEnd ? (
+            {progress === "STARTED" && (
                 <p className="h-5 text-xs text-gray-500">
                     🚀 Type as fast as you can!
                 </p>
-            ) : (
+            )}
+
+            {(progress === "PENDING" || progress === "END") && (
                 <div
                     className={cn(
                         "flex flex-col gap-4 text-xs text-gray-500 md:flex-row md:items-center"

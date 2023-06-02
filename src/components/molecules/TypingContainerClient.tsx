@@ -26,8 +26,7 @@ export function TypingContainer({
     const {
         startTypingGame,
         inputRef,
-        isTypingEnd,
-        startTyping,
+        progress,
         restart,
         handleRestart,
         wordsBeforeCurrentCharacter,
@@ -38,7 +37,7 @@ export function TypingContainer({
         accuracy,
         totalDuration,
         currentCharIndex,
-    } = useTypeContext({ text });
+    } = useTypeContext({ text, mode });
 
     return (
         <>
@@ -51,8 +50,7 @@ export function TypingContainer({
 
             <div className="grid gap-4">
                 <TypingHeader
-                    isTypingEnd={isTypingEnd}
-                    startTyping={startTyping}
+                    progress={progress}
                     title={title}
                     url={url}
                     mode={mode}
@@ -64,8 +62,7 @@ export function TypingContainer({
                     wordsBeforeCurrentCharacter={wordsBeforeCurrentCharacter}
                     currentCharacter={currentCharacter}
                     wordsAfterCurrentCharacter={wordsAfterCurrentCharacter}
-                    isTypingEnd={isTypingEnd}
-                    startTyping={startTyping}
+                    progress={progress}
                     errorIndexBeforeCurrentCharacter={
                         errorIndexBeforeCurrentCharacter
                     }
@@ -81,7 +78,7 @@ export function TypingContainer({
             <TypingFooter
                 mode={mode}
                 handleRestart={handleRestart}
-                isTypingEnd={isTypingEnd}
+                progress={progress}
             />
         </>
     );
