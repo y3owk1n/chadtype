@@ -6,6 +6,7 @@ import { useRef } from "react";
 import { useInView } from "react-intersection-observer";
 
 interface TypingLinesProps {
+    inputRef: ReturnType<typeof useTypeContext>["inputRef"];
     wordsBeforeCurrentCharacter: ReturnType<
         typeof useTypeContext
     >["wordsAfterCurrentCharacter"];
@@ -21,6 +22,7 @@ interface TypingLinesProps {
 }
 
 export function TypingLines({
+    inputRef,
     wordsBeforeCurrentCharacter,
     currentCharacter,
     wordsAfterCurrentCharacter,
@@ -46,6 +48,20 @@ export function TypingLines({
 
     return (
         <>
+            <input
+                ref={inputRef}
+                className="sr-only" // Probably no one would use a screenreader to play typing game?
+                spellCheck={false}
+                tabIndex={0}
+                autoComplete="off"
+                autoCapitalize="none"
+                autoCorrect="off"
+                data-gramm="false"
+                data-gramm_editor="false"
+                data-enable-grammarly="false"
+                list="autocompleteOff"
+                data-ddg-inputtype="unknown"
+            />
             <div
                 ref={containerRef}
                 className="h-24 overflow-hidden font-mono text-2xl"
