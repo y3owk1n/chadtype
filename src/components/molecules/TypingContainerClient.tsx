@@ -24,6 +24,7 @@ export function TypingContainer({
     numberOfWords,
 }: TypingContainerProps) {
     const {
+        inputRef,
         isTypingEnd,
         startTyping,
         restart,
@@ -57,6 +58,7 @@ export function TypingContainer({
                     numberOfWords={numberOfWords}
                 />
                 <TypingLines
+                    inputRef={inputRef}
                     wordsBeforeCurrentCharacter={wordsBeforeCurrentCharacter}
                     currentCharacter={currentCharacter}
                     wordsAfterCurrentCharacter={wordsAfterCurrentCharacter}
