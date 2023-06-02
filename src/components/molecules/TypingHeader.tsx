@@ -24,7 +24,7 @@ export function TypingHeader({
     isTypingEnd,
 }: TypingHeaderProps) {
     return (
-        <>
+        <div className="grid gap-4">
             {startTyping || !isTypingEnd ? (
                 <p className="h-5 text-xs text-gray-500">
                     🚀 Type as fast as you can!
@@ -32,7 +32,7 @@ export function TypingHeader({
             ) : (
                 <div
                     className={cn(
-                        "flex h-5 items-center gap-4 text-xs text-gray-500"
+                        "flex flex-col gap-4 text-xs text-gray-500 md:flex-row md:items-center"
                     )}
                 >
                     <div>
@@ -45,7 +45,10 @@ export function TypingHeader({
                         </Badge>
                         <span>or click any words to start typing</span>
                     </div>
-                    <Separator orientation="vertical" />
+                    <Separator
+                        orientation="vertical"
+                        className="hidden md:block"
+                    />
                     {mode === "wikipedia" && (
                         <a
                             href={url}
@@ -53,24 +56,25 @@ export function TypingHeader({
                             rel="noopener"
                             className={cn(
                                 badgeVariants({ variant: "outline" }),
-                                "mx-2 text-xs text-gray-500"
+                                "w-fit text-xs text-gray-500 md:mx-2"
                             )}
                         >
-                            {title}
+                            Content: {title}
                             <ExternalLinkIcon className="ml-2 h-3 w-3" />
                         </a>
                     )}
                     {mode === "quotes" && (
                         <Badge
-                            className="mx-1 text-xs text-gray-500"
+                            className="w-fit text-xs text-gray-500 md:mx-1"
                             variant="outline"
                         >
+                            Content:{" "}
                             {title && title.length > 0 ? title : "Unknown"}
                         </Badge>
                     )}
                     {mode === "words" && (
                         <Badge
-                            className="mx-1 text-xs text-gray-500"
+                            className="w-fit text-xs text-gray-500 md:mx-1"
                             variant="outline"
                         >
                             {numberOfWords} words
@@ -78,6 +82,6 @@ export function TypingHeader({
                     )}
                 </div>
             )}
-        </>
+        </div>
     );
 }

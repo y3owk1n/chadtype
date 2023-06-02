@@ -21,7 +21,7 @@ export function TypingStatistics({
 }: TypingStatisticsProps) {
     return (
         <>
-            <div className="mx-auto flex items-center gap-2">
+            <div className="mx-auto flex flex-wrap items-center justify-center gap-2">
                 <Badge
                     className="w-fit text-xs text-gray-500"
                     variant="outline"
