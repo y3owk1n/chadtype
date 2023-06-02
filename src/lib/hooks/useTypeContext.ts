@@ -23,6 +23,8 @@ export function useTypeContext({ text, mode }: TypeContextOptions) {
     // Track on start and end time
     const [startTime, setStartTime] = useState<number | null>(null);
 
+    const [isFocus, setIsFocus] = useState(false);
+
     const [currentCharIndex, setCurrentCharIndex] = useState(0);
     const [currentWord, setCurrentWord] = useState(0);
 
@@ -156,6 +158,32 @@ export function useTypeContext({ text, mode }: TypeContextOptions) {
         }
     });
 
+    useEffect(() => {
+        const handleFocus = () => {
+            // Element has gained focus
+            setIsFocus(true);
+        };
+
+        const handleBlur = () => {
+            // Element has lost focus
+            setIsFocus(false);
+        };
+
+        const element = inputRef.current;
+
+        if (element) {
+            element.addEventListener("focus", handleFocus);
+            element.addEventListener("blur", handleBlur);
+        }
+
+        return () => {
+            if (element) {
+                element.removeEventListener("focus", handleFocus);
+                element.removeEventListener("blur", handleBlur);
+            }
+        };
+    }, [inputRef]);
+
     const handleRestart = () => {
         restart();
         router.refresh();
@@ -174,6 +202,7 @@ export function useTypeContext({ text, mode }: TypeContextOptions) {
 
     return {
         inputRef,
+        isFocus,
         wordsBeforeCurrentCharacter,
         currentCharacter,
         wordsAfterCurrentCharacter,
