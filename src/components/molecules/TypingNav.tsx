@@ -5,6 +5,14 @@ import { cn } from "@/utils";
 import Link from "next/link";
 
 import {
+    Button,
+    DropdownMenu,
+    DropdownMenuCheckboxItem,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuLabel,
+    DropdownMenuSeparator,
+    DropdownMenuTrigger,
     NavigationMenu,
     NavigationMenuItem,
     NavigationMenuLink,
@@ -76,32 +84,122 @@ const wordsMenu: ModeMenu[] = [
 
 export function TypingNav({ mode, numberOfWords, restart }: TypingNavProps) {
     return (
-        <ScrollArea className="mx-auto flex h-full w-full gap-4 rounded-md border p-2 md:w-fit">
-            <NavigationMenu>
-                <NavigationMenuList>
-                    {modeMenu.map((menu) => {
-                        let query;
-                        if (menu.numberOfWords) {
-                            query = {
-                                mode: menu.mode,
-                                numberOfWords: menu.numberOfWords,
-                                id: crypto.randomUUID(),
-                            };
-                        } else {
-                            query = {
-                                mode: menu.mode,
-                                id: crypto.randomUUID(),
-                            };
-                        }
-                        return (
-                            <NavigationMenuItem key={menu.label}>
-                                <NavigationMenuLink
-                                    asChild
-                                    active={mode === menu.mode}
-                                    className={cn(
-                                        navigationMenuTriggerStyle(),
-                                        "h-auto px-2 py-1 text-xs"
-                                    )}
+        <>
+            <ScrollArea className="mx-auto hidden h-full w-fit gap-4 rounded-md border p-2 md:flex">
+                <NavigationMenu>
+                    <NavigationMenuList>
+                        {modeMenu.map((menu) => {
+                            let query;
+                            if (menu.numberOfWords) {
+                                query = {
+                                    mode: menu.mode,
+                                    numberOfWords: menu.numberOfWords,
+                                    id: crypto.randomUUID(),
+                                };
+                            } else {
+                                query = {
+                                    mode: menu.mode,
+                                    id: crypto.randomUUID(),
+                                };
+                            }
+                            return (
+                                <NavigationMenuItem key={menu.label}>
+                                    <NavigationMenuLink
+                                        asChild
+                                        active={mode === menu.mode}
+                                        className={cn(
+                                            navigationMenuTriggerStyle(),
+                                            "h-auto px-2 py-1 text-xs"
+                                        )}
+                                    >
+                                        <Link
+                                            prefetch={false}
+                                            href={{
+                                                pathname: menu.pathname,
+                                                query,
+                                            }}
+                                            onClick={restart}
+                                        >
+                                            {menu.label}
+                                        </Link>
+                                    </NavigationMenuLink>
+                                </NavigationMenuItem>
+                            );
+                        })}
+
+                        {mode === "words" && numberOfWords && (
+                            <>
+                                <Separator
+                                    orientation="vertical"
+                                    className="h-6"
+                                />
+                                {wordsMenu.map((menu) => {
+                                    return (
+                                        <NavigationMenuItem key={menu.label}>
+                                            <NavigationMenuLink
+                                                asChild
+                                                active={
+                                                    numberOfWords ===
+                                                    menu.numberOfWords
+                                                }
+                                                className={cn(
+                                                    navigationMenuTriggerStyle(),
+                                                    "h-auto px-2 py-1 text-xs"
+                                                )}
+                                            >
+                                                <Link
+                                                    prefetch={false}
+                                                    href={{
+                                                        pathname: menu.pathname,
+                                                        query: {
+                                                            mode: menu.mode,
+                                                            numberOfWords:
+                                                                menu.numberOfWords,
+                                                            id: crypto.randomUUID(),
+                                                        },
+                                                    }}
+                                                    onClick={restart}
+                                                >
+                                                    {menu.label}
+                                                </Link>
+                                            </NavigationMenuLink>
+                                        </NavigationMenuItem>
+                                    );
+                                })}
+                            </>
+                        )}
+                    </NavigationMenuList>
+                </NavigationMenu>
+            </ScrollArea>
+            <div className="mx-auto md:hidden">
+                <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                        <Button
+                            size="sm"
+                            variant="outline"
+                        >
+                            Settings
+                        </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent>
+                        {modeMenu.map((menu) => {
+                            let query;
+                            if (menu.numberOfWords) {
+                                query = {
+                                    mode: menu.mode,
+                                    numberOfWords: menu.numberOfWords,
+                                    id: crypto.randomUUID(),
+                                };
+                            } else {
+                                query = {
+                                    mode: menu.mode,
+                                    id: crypto.randomUUID(),
+                                };
+                            }
+                            return (
+                                <DropdownMenuCheckboxItem
+                                    key={menu.label}
+                                    checked={mode === menu.mode}
                                 >
                                     <Link
                                         prefetch={false}
@@ -113,30 +211,21 @@ export function TypingNav({ mode, numberOfWords, restart }: TypingNavProps) {
                                     >
                                         {menu.label}
                                     </Link>
-                                </NavigationMenuLink>
-                            </NavigationMenuItem>
-                        );
-                    })}
+                                </DropdownMenuCheckboxItem>
+                            );
+                        })}
 
-                    {mode === "words" && numberOfWords && (
-                        <>
-                            <Separator
-                                orientation="vertical"
-                                className="h-6"
-                            />
-                            {wordsMenu.map((menu) => {
-                                return (
-                                    <NavigationMenuItem key={menu.label}>
-                                        <NavigationMenuLink
-                                            asChild
-                                            active={
+                        {mode === "words" && numberOfWords && (
+                            <>
+                                <DropdownMenuSeparator />
+                                {wordsMenu.map((menu) => {
+                                    return (
+                                        <DropdownMenuCheckboxItem
+                                            key={menu.label}
+                                            checked={
                                                 numberOfWords ===
                                                 menu.numberOfWords
                                             }
-                                            className={cn(
-                                                navigationMenuTriggerStyle(),
-                                                "h-auto px-2 py-1 text-xs"
-                                            )}
                                         >
                                             <Link
                                                 prefetch={false}
@@ -153,14 +242,14 @@ export function TypingNav({ mode, numberOfWords, restart }: TypingNavProps) {
                                             >
                                                 {menu.label}
                                             </Link>
-                                        </NavigationMenuLink>
-                                    </NavigationMenuItem>
-                                );
-                            })}
-                        </>
-                    )}
-                </NavigationMenuList>
-            </NavigationMenu>
-        </ScrollArea>
+                                        </DropdownMenuCheckboxItem>
+                                    );
+                                })}
+                            </>
+                        )}
+                    </DropdownMenuContent>
+                </DropdownMenu>
+            </div>
+        </>
     );
 }
