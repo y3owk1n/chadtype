@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useRef, useState } from "react";
 
 import { type GenerateWordsSchema } from "../queries";
+import { useInputFocus } from "./useInputFocus";
 import { useKeyPress } from "./useKeyPress";
 import { usePageLeave } from "./usePageLeave";
 
@@ -163,31 +164,11 @@ export function useTypeContext({ text, mode }: TypeContextOptions) {
         setIsFocus(false);
     });
 
-    useEffect(() => {
-        const handleFocus = () => {
-            // Element has gained focus
-            setIsFocus(true);
-        };
-
-        const handleBlur = () => {
-            // Element has lost focus
-            setIsFocus(false);
-        };
-
-        const element = inputRef.current;
-
-        if (element) {
-            element.addEventListener("focus", handleFocus);
-            element.addEventListener("blur", handleBlur);
-        }
-
-        return () => {
-            if (element) {
-                element.removeEventListener("focus", handleFocus);
-                element.removeEventListener("blur", handleBlur);
-            }
-        };
-    }, [inputRef]);
+    useInputFocus({
+        setBlurCb: () => setIsFocus(false),
+        setFocusCb: () => setIsFocus(true),
+        elementRef: inputRef,
+    });
 
     const handleRestart = () => {
         restart();
