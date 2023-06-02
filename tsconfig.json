@@ -27,6 +27,7 @@
         ]
     },
     "include": [
+        "next-sitemap.config.js",
         "tailwind.config.cjs",
         ".eslintrc.cjs",
         "next-env.d.ts",
