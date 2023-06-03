@@ -41,7 +41,7 @@ export function TypingHeader({
                             className="mx-1 text-xs text-gray-500"
                             variant="outline"
                         >
-                            Enter
+                            ⌘/CTRL+Enter
                         </Badge>
                         <span>or click any words to start typing</span>
                     </div>
