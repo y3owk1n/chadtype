@@ -2,7 +2,7 @@
 
 import { type useTypeContext } from "@/lib";
 import { cn } from "@/utils";
-import { useEffect, useRef, useState } from "react";
+import { useRef } from "react";
 import { useInView } from "react-intersection-observer";
 
 interface TypingLinesProps {
