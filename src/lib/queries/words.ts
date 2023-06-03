@@ -74,11 +74,13 @@ export type GenerateWordsSchema = z.infer<typeof generateWordsSchema>;
 export async function generateWords({
     mode,
     numberOfWords,
+    timeCount,
 }: GenerateWordsSchema): Promise<GenerateWordData> {
     try {
         await generateWordsSchema.parseAsync({
             mode,
             numberOfWords,
+            timeCount,
         });
     } catch (error) {
         if (error instanceof ZodError) {
