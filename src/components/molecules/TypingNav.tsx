@@ -330,6 +330,39 @@ export function TypingNav({
                                 })}
                             </>
                         )}
+
+                        {mode === "time" && timeCount && (
+                            <>
+                                <DropdownMenuSeparator />
+                                {timeMenu.map((menu) => {
+                                    return (
+                                        <Link
+                                            key={menu.label}
+                                            prefetch={false}
+                                            href={{
+                                                pathname: menu.pathname,
+                                                query: {
+                                                    mode: menu.mode,
+                                                    timeCount:
+                                                        menu.timeCount,
+                                                    id: crypto.randomUUID(),
+                                                },
+                                            }}
+                                            onClick={restart}
+                                        >
+                                            <DropdownMenuCheckboxItem
+                                                checked={
+                                                    timeCount ===
+                                                    menu.timeCount
+                                                }
+                                            >
+                                                {menu.label}
+                                            </DropdownMenuCheckboxItem>
+                                        </Link>
+                                    );
+                                })}
+                            </>
+                        )}
                     </DropdownMenuContent>
                 </DropdownMenu>
             </div>
