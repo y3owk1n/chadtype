@@ -14,11 +14,17 @@ export default async function Page({ searchParams }: PageProps) {
             ? searchParams?.numberOfWords
             : "30";
 
+    const paramsTimeCount =
+        typeof searchParams?.timeCount === "string"
+            ? searchParams?.timeCount
+            : "30";
+
     const { sectionText, sectionTitle, sectionUrl, mode } = await generateWords(
         {
             mode: paramsMode,
             numberOfWords:
                 paramsNumberOfWords as GenerateWordsSchema["numberOfWords"],
+            timeCount: paramsTimeCount as GenerateWordsSchema["timeCount"],
         }
     );
 
@@ -31,6 +37,9 @@ export default async function Page({ searchParams }: PageProps) {
                     title={sectionTitle}
                     url={sectionUrl}
                     numberOfWords={paramsNumberOfWords}
+                    timeCount={
+                        paramsTimeCount as GenerateWordsSchema["timeCount"]
+                    }
                 />
             </div>
         </div>

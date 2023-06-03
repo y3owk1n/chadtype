@@ -21,9 +21,9 @@ import {
 } from "../atoms";
 
 interface TypingNavProps {
-    text: string;
     mode: GenerateWordsSchema["mode"];
     numberOfWords: string;
+    timeCount: GenerateWordsSchema['timeCount'];
     restart: ReturnType<typeof useTypeContext>["restart"];
 }
 
@@ -31,6 +31,13 @@ interface ModeMenu {
     pathname: string;
     mode: GenerateWordsSchema["mode"];
     numberOfWords?: GenerateWordsSchema["numberOfWords"];
+    label: string;
+}
+
+interface TimeMenu {
+    pathname: string;
+    mode: GenerateWordsSchema["mode"];
+    timeCount?: "10" | "30" | "60" | "120";
     label: string;
 }
 
@@ -50,6 +57,11 @@ const modeMenu: ModeMenu[] = [
         mode: "words",
         label: "Words",
         numberOfWords: "30",
+    },
+    {
+        pathname: "/",
+        mode: "time",
+        label: "Time",
     },
 ];
 
@@ -80,7 +92,39 @@ const wordsMenu: ModeMenu[] = [
     },
 ];
 
-export function TypingNav({ mode, numberOfWords, restart }: TypingNavProps) {
+const timeMenu: TimeMenu[] = [
+    {
+        pathname: "/",
+        mode: "time",
+        timeCount: "10",
+        label: "10",
+    },
+    {
+        pathname: "/",
+        mode: "time",
+        timeCount: "30",
+        label: "30",
+    },
+    {
+        pathname: "/",
+        mode: "time",
+        timeCount: "60",
+        label: "60",
+    },
+    {
+        pathname: "/",
+        mode: "time",
+        timeCount: "120",
+        label: "120",
+    },
+];
+
+export function TypingNav({
+    mode,
+    numberOfWords,
+    timeCount,
+    restart,
+}: TypingNavProps) {
     return (
         <>
             <ScrollArea className="mx-auto hidden h-full w-fit gap-4 rounded-md border p-2 md:flex">
@@ -153,6 +197,47 @@ export function TypingNav({ mode, numberOfWords, restart }: TypingNavProps) {
                                                             mode: menu.mode,
                                                             numberOfWords:
                                                                 menu.numberOfWords,
+                                                            id: crypto.randomUUID(),
+                                                        },
+                                                    }}
+                                                    onClick={restart}
+                                                >
+                                                    {menu.label}
+                                                </Link>
+                                            </NavigationMenuLink>
+                                        </NavigationMenuItem>
+                                    );
+                                })}
+                            </>
+                        )}
+
+                        {mode === "time" && timeCount && (
+                            <>
+                                <Separator
+                                    orientation="vertical"
+                                    className="h-6"
+                                />
+                                {timeMenu.map((menu) => {
+                                    return (
+                                        <NavigationMenuItem key={menu.label}>
+                                            <NavigationMenuLink
+                                                asChild
+                                                active={
+                                                    timeCount === menu.timeCount
+                                                }
+                                                className={cn(
+                                                    navigationMenuTriggerStyle(),
+                                                    "h-auto px-2 py-1 text-xs"
+                                                )}
+                                            >
+                                                <Link
+                                                    prefetch={false}
+                                                    href={{
+                                                        pathname: menu.pathname,
+                                                        query: {
+                                                            mode: menu.mode,
+                                                            timeCount:
+                                                                menu.timeCount,
                                                             id: crypto.randomUUID(),
                                                         },
                                                     }}
