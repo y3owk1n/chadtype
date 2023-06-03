@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useRef, useState } from "react";
 
 import { type GenerateWordsSchema } from "../queries";
+import { useHotkeys } from "./useHotKeys";
 import { useInputFocus } from "./useInputFocus";
 import { useKeyPress } from "./useKeyPress";
 import { usePageLeave } from "./usePageLeave";
@@ -153,12 +154,7 @@ export function useTypeContext({ text, mode }: TypeContextOptions) {
         lastIndex,
     ]);
 
-    useKeyPress((key) => {
-        // Press enter key to start
-        if (key === "Enter") {
-            startTypingGame();
-        }
-    });
+    useHotkeys([["mod+Enter", startTypingGame]]);
 
     usePageLeave(() => {
         setIsFocus(false);
