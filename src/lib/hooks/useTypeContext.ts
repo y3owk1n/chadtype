@@ -6,7 +6,6 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { type GenerateWordsSchema } from "../queries";
 import { useHotkeys } from "./useHotKeys";
 import { useInputFocus } from "./useInputFocus";
-import { useKeyPress } from "./useKeyPress";
 import { usePageLeave } from "./usePageLeave";
 
 interface TypeContextOptions {
