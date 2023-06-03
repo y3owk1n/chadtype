@@ -3,7 +3,7 @@ import React from "react";
 const useEffectEvent = React.experimental_useEffectEvent;
 
 interface UseCountdownProps {
-    endTime: number;
+    duration: number;
     options: UseCountdownOptions;
 }
 
@@ -13,7 +13,8 @@ interface UseCountdownOptions {
     onTick: () => void;
 }
 
-export function useCountdown({ endTime, options }: UseCountdownProps) {
+export function useCountdown({ duration, options }: UseCountdownProps) {
+    const [isStart, setIsStart] = React.useState(false);
     const [count, setCount] = React.useState<number>(0);
     const intervalIdRef = React.useRef<number>(0);
 
@@ -22,9 +23,11 @@ export function useCountdown({ endTime, options }: UseCountdownProps) {
     };
 
     const onTick = useEffectEvent(() => {
+        if (!isStart) return;
         if (count === 0) {
             handleClearInterval();
             options.onComplete();
+            setIsStart(false);
         } else {
             setCount(count - 1);
             options.onTick();
@@ -40,8 +43,8 @@ export function useCountdown({ endTime, options }: UseCountdownProps) {
     }, [options.interval]);
 
     React.useEffect(() => {
-        setCount(Math.round((endTime - Date.now()) / options.interval));
-    }, [endTime, options.interval]);
+        setCount(Math.round(duration / options.interval));
+    }, [duration, options.interval]);
 
-    return count;
+    return { count, setIsStart };
 }

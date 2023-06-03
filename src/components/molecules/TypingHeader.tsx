@@ -12,6 +12,8 @@ interface TypingHeaderProps {
     mode: GenerateWordsSchema["mode"];
     numberOfWords: string;
     progress: ReturnType<typeof useTypeContext>["progress"];
+    count: ReturnType<typeof useTypeContext>["count"];
+    timeCount: GenerateWordsSchema["timeCount"];
 }
 
 export function TypingHeader({
@@ -20,13 +22,30 @@ export function TypingHeader({
     mode,
     numberOfWords,
     progress,
+    count,
+    timeCount,
 }: TypingHeaderProps) {
     return (
         <div className="grid gap-4">
             {progress === "STARTED" && (
-                <p className="h-5 text-xs text-gray-500">
-                    🚀 Type as fast as you can!
-                </p>
+                <div
+                    className={cn(
+                        "flex flex-col gap-4 text-xs text-gray-500 md:flex-row md:items-center"
+                    )}
+                >
+                    <p className="h-5 text-xs text-gray-500">
+                        🚀 Type as fast as you can!
+                    </p>
+
+                    {mode === "time" && (
+                        <Badge
+                            className="w-fit text-xs text-gray-500 md:mx-1"
+                            variant="outline"
+                        >
+                            {count} seconds
+                        </Badge>
+                    )}
+                </div>
             )}
 
             {(progress === "PENDING" || progress === "END") && (
@@ -78,6 +97,14 @@ export function TypingHeader({
                             variant="outline"
                         >
                             {numberOfWords} words
+                        </Badge>
+                    )}
+                    {mode === "time" && (
+                        <Badge
+                            className="w-fit text-xs text-gray-500 md:mx-1"
+                            variant="outline"
+                        >
+                            {timeCount} seconds
                         </Badge>
                     )}
                 </div>

@@ -3,7 +3,8 @@
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useRef, useState } from "react";
 
-import { type GenerateWordsSchema } from "../queries";
+import { getRandomWords, type GenerateWordsSchema } from "../queries";
+import { useCountdown } from "./useCountdown";
 import { useInputFocus } from "./useInputFocus";
 import { useKeyPress } from "./useKeyPress";
 import { usePageLeave } from "./usePageLeave";
@@ -11,11 +12,18 @@ import { usePageLeave } from "./usePageLeave";
 interface TypeContextOptions {
     text: string;
     mode: GenerateWordsSchema["mode"];
+    timeCount: string;
 }
 
-export function useTypeContext({ text, mode }: TypeContextOptions) {
+export function useTypeContext({
+    text: initialText,
+    mode,
+    timeCount,
+}: TypeContextOptions) {
     const router = useRouter();
     const inputRef = useRef<HTMLInputElement>(null);
+
+    const [typingText, setTypingText] = useState(initialText);
 
     // Indicate whether game is started
     const [progress, setProgress] = useState<"PENDING" | "STARTED" | "END">(
@@ -42,8 +50,10 @@ export function useTypeContext({ text, mode }: TypeContextOptions) {
     }, []);
 
     const calculateAccuracy = useCallback(() => {
-        return ((text.length - errorIndex.length) / text.length) * 100;
-    }, [errorIndex.length, text.length]);
+        return (
+            ((typingText.length - errorIndex.length) / typingText.length) * 100
+        );
+    }, [errorIndex.length, typingText.length]);
 
     const handleErrors = useCallback(() => {
         const matchedError = errorIndex.find(
@@ -57,19 +67,39 @@ export function useTypeContext({ text, mode }: TypeContextOptions) {
         }
     }, [currentCharIndex, errorIndex]);
 
+    const { count, setIsStart } = useCountdown({
+        duration: Number(timeCount) * 1000,
+        options: {
+            interval: 1000,
+            onTick: () => {
+                return;
+            },
+            onComplete: () => {
+                if (inputRef.current) {
+                    setProgress("END");
+                    inputRef.current.disabled = true;
+                }
+            },
+        },
+    });
+
     const startTypingGame = useCallback(() => {
         if (inputRef.current && progress === "PENDING") {
+            if (mode === "time") {
+                setIsStart(true);
+            }
             setProgress("STARTED");
             setStartTime(currentTime());
             inputRef.current.disabled = false;
             inputRef.current.focus();
         }
-    }, [currentTime, progress]);
+    }, [currentTime, mode, progress, setIsStart]);
 
     const restart = useCallback(() => {
         if (inputRef.current) {
             inputRef.current.value = "";
         }
+        setIsStart(false);
         setAuccuracy(0);
         setCurrentCharIndex(0);
         setCurrentWord(0);
@@ -87,7 +117,16 @@ export function useTypeContext({ text, mode }: TypeContextOptions) {
 
     const latestChar = inputCharArr[currentCharIndex];
 
-    const currentChar = text[currentCharIndex];
+    const currentChar = typingText[currentCharIndex];
+
+    const getMoreWords = async () => {
+        const newWords = await getRandomWords({
+            numberOfWords: 30,
+            mode: "time",
+        });
+        setTypingText((prev) => prev + " " + newWords.sectionText);
+        return;
+    };
 
     useEffect(() => {
         if (!startTime || progress === "PENDING") {
@@ -107,10 +146,17 @@ export function useTypeContext({ text, mode }: TypeContextOptions) {
         setTotalDuration(durationInMinutes);
 
         // If finished typing
-        if (inputCharLength === text.length) {
+        if (inputCharLength === typingText.length) {
             if (inputRef.current) {
                 setProgress("END");
                 inputRef.current.disabled = true;
+            }
+        }
+
+        // If mode is time
+        if (mode === "time") {
+            if (typingText.length - inputCharLength === 15 * 5) {
+                getMoreWords().catch((err) => console.log(err));
             }
         }
 
@@ -147,7 +193,7 @@ export function useTypeContext({ text, mode }: TypeContextOptions) {
         currentCharIndex,
         latestChar,
         inputCharLength,
-        text,
+        typingText,
         currentChar,
         currentWord,
         lastIndex,
@@ -175,14 +221,14 @@ export function useTypeContext({ text, mode }: TypeContextOptions) {
         router.refresh();
     };
 
-    const wordsBeforeCurrentCharacter = text
+    const wordsBeforeCurrentCharacter = typingText
         .substring(0, currentCharIndex || 0)
         .split("");
     const errorIndexBeforeCurrentCharacter = errorIndex.filter(
         (error) => error < currentCharIndex
     );
-    const currentCharacter = text[currentCharIndex || 0];
-    const wordsAfterCurrentCharacter = text
+    const currentCharacter = typingText[currentCharIndex || 0];
+    const wordsAfterCurrentCharacter = typingText
         .substring(currentCharIndex + 1)
         .split("");
 
@@ -201,5 +247,7 @@ export function useTypeContext({ text, mode }: TypeContextOptions) {
         errorIndexBeforeCurrentCharacter,
         restart,
         startTypingGame,
+        typingText,
+        count,
     };
 }

@@ -14,6 +14,7 @@ interface TypingContainerProps {
     url?: string;
     mode: GenerateWordsSchema["mode"];
     numberOfWords: string;
+    timeCount: GenerateWordsSchema["timeCount"];
 }
 
 export function TypingContainer({
@@ -22,6 +23,7 @@ export function TypingContainer({
     url,
     mode,
     numberOfWords,
+    timeCount,
 }: TypingContainerProps) {
     const {
         startTypingGame,
@@ -38,14 +40,16 @@ export function TypingContainer({
         accuracy,
         totalDuration,
         currentCharIndex,
-    } = useTypeContext({ text, mode });
+        typingText,
+        count,
+    } = useTypeContext({ text, mode, timeCount });
 
     return (
         <>
             <TypingNav
+                timeCount={timeCount}
                 restart={restart}
                 mode={mode}
-                text={text}
                 numberOfWords={numberOfWords}
             />
 
@@ -56,6 +60,8 @@ export function TypingContainer({
                     url={url}
                     mode={mode}
                     numberOfWords={numberOfWords}
+                    count={count}
+                    timeCount={timeCount}
                 />
                 <TypingLines
                     isFocus={isFocus}
@@ -71,7 +77,7 @@ export function TypingContainer({
                 />
             </div>
             <TypingStatistics
-                text={text}
+                text={typingText}
                 wpm={wpm}
                 accuracy={accuracy}
                 totalDuration={totalDuration}
