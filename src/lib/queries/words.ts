@@ -64,8 +64,9 @@ interface GenerateWordData {
 }
 
 const generateWordsSchema = z.object({
-    mode: z.enum(["wikipedia", "quotes", "words"]),
+    mode: z.enum(["wikipedia", "quotes", "words", "time"]),
     numberOfWords: z.enum(["10", "30", "50", "100"]),
+    timeCount: z.enum(["10", "30", "60", "120"]),
 });
 
 export type GenerateWordsSchema = z.infer<typeof generateWordsSchema>;
@@ -96,14 +97,22 @@ export async function generateWords({
         case "words":
             return await getRandomWords({
                 numberOfWords: Number(numberOfWords) || 30,
+                mode: "words",
+            });
+        case "time":
+            return await getRandomWords({
+                numberOfWords: Number(numberOfWords) || 30,
+                mode: "time",
             });
     }
 }
 
 export async function getRandomWords({
     numberOfWords,
+    mode,
 }: {
     numberOfWords: number;
+    mode: GenerateWordsSchema["mode"];
 }): Promise<GenerateWordData> {
     //Find the absolute path of the json directory
     const jsonDirectory = path.join(process.cwd(), "src", "lib", "data");
@@ -127,7 +136,7 @@ export async function getRandomWords({
 
     return {
         sectionText: joinedRandomWords,
-        mode: "words",
+        mode,
     };
 }
 
