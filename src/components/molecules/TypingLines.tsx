@@ -80,25 +80,32 @@ export function TypingLines({
                     </div>
                 )}
                 {wordsBeforeCurrentCharacter.length > 0 &&
-                    wordsBeforeCurrentCharacter.map((word, index) => (
-                        <span
-                            key={`${word}-${index}`}
-                            className={cn(
-                                "text-gray-800 dark:text-gray-300",
-                                errorIndexBeforeCurrentCharacter.find(
-                                    (errorIndex) =>
-                                        errorIndex === index && word !== " "
-                                ) && "text-red-500 dark:text-red-300",
-                                errorIndexBeforeCurrentCharacter.find(
-                                    (errorIndex) =>
-                                        errorIndex === index && word === " "
-                                ) &&
-                                    "border-b border-red-500 dark:border-red-300"
-                            )}
-                        >
-                            {word}
-                        </span>
-                    ))}
+                    wordsBeforeCurrentCharacter.map((word, index) => {
+                        const isErrorWord =
+                            errorIndexBeforeCurrentCharacter.find(
+                                (errorIndex) =>
+                                    errorIndex === index && word !== " "
+                            ) !== undefined;
+                        const isErrorSpace =
+                            errorIndexBeforeCurrentCharacter.find(
+                                (errorIndex) =>
+                                    errorIndex === index && word === " "
+                            ) !== undefined;
+                        return (
+                            <span
+                                key={`${word}-${index}`}
+                                className={cn(
+                                    "text-gray-800 dark:text-gray-300",
+                                    isErrorWord &&
+                                        "text-red-500 dark:text-red-300",
+                                    isErrorSpace &&
+                                        "border-b border-red-500 dark:border-red-300"
+                                )}
+                            >
+                                {word}
+                            </span>
+                        );
+                    })}
                 <span
                     ref={ref}
                     className={cn(
