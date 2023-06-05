@@ -24,7 +24,7 @@ export function useCountdown({ duration, options }: UseCountdownProps) {
 
     const onTick = useEffectEvent(() => {
         if (!isStart) return;
-        if (count === 0) {
+        if (count === 1) {
             handleClearInterval();
             options.onComplete();
             setIsStart(false);
@@ -40,11 +40,11 @@ export function useCountdown({ duration, options }: UseCountdownProps) {
         }, options.interval);
 
         return () => handleClearInterval();
-    }, [options.interval]);
+    }, [options.interval, isStart]);
 
     React.useEffect(() => {
         setCount(Math.round(duration / options.interval));
-    }, [duration, options.interval]);
+    }, [duration, options.interval, isStart]);
 
     return { count, setIsStart };
 }

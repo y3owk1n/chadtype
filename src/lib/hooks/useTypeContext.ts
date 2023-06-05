@@ -6,6 +6,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { getRandomWords, type GenerateWordsSchema } from "../queries";
 import { useCountdown } from "./useCountdown";
 import { useInputFocus } from "./useInputFocus";
+import { useIntervalWhen } from "./useIntervalWhen";
 import { useKeyPress } from "./useKeyPress";
 import { usePageLeave } from "./usePageLeave";
 
@@ -78,6 +79,7 @@ export function useTypeContext({
                 if (inputRef.current) {
                     setProgress("END");
                     inputRef.current.disabled = true;
+                    setIsStart(false);
                 }
             },
         },

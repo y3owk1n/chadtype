@@ -5,3 +5,4 @@ export * from "./usePageLeave";
 export * from "./useInputFocus";
 export * from "./useHotKeys";
 export * from "./useCountdown";
+export * from "./useIntervalWhen";
