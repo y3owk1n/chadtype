@@ -1,6 +1,8 @@
-import { Skeleton } from "@/components";
+"use client";
 
-export default function Loading() {
+import { Skeleton } from "../atoms";
+
+export function TypingContainerSkeleton() {
     return (
         <div className="grid h-full min-h-[calc(100vh-80px-96px)] place-items-center">
             <div className=" grid w-full max-w-4xl gap-8 ">

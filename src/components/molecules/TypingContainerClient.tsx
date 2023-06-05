@@ -8,7 +8,7 @@ import { TypingLines } from "./TypingLines";
 import { TypingNav } from "./TypingNav";
 import { TypingStatistics } from "./TypingStatistics";
 
-interface TypingContainerProps {
+interface TypingContainerClientProps {
     text: string;
     title?: string;
     url?: string;
@@ -17,14 +17,14 @@ interface TypingContainerProps {
     timeCount: GenerateWordsSchema["timeCount"];
 }
 
-export function TypingContainer({
+export function TypingContainerClient({
     text,
     title,
     url,
     mode,
     numberOfWords,
     timeCount,
-}: TypingContainerProps) {
+}: TypingContainerClientProps) {
     const {
         startTypingGame,
         isFocus,

@@ -1,46 +1,36 @@
-import { TypingContainer } from "@/components";
-import { type GenerateWordsSchema, generateWords } from "@/lib";
+import { TypingContainerSkeleton } from "@/components";
+import TypingContainerServer from "@/components/molecules/TypingContainerServer";
+import { type GenerateWordsSchema } from "@/lib";
+import { Suspense } from "react";
 
 interface PageProps {
     searchParams?: { [key: string]: string | string[] | undefined };
 }
 
-export default async function Page({ searchParams }: PageProps) {
+export default function Page({ searchParams }: PageProps) {
     const paramsMode = (searchParams?.mode ||
         "words") as GenerateWordsSchema["mode"];
 
-    const paramsNumberOfWords =
-        typeof searchParams?.numberOfWords === "string"
-            ? searchParams?.numberOfWords
-            : "30";
+    const paramsNumberOfWords = (searchParams?.numberOfWords ||
+        "30") as GenerateWordsSchema["numberOfWords"];
 
-    const paramsTimeCount =
-        typeof searchParams?.timeCount === "string"
-            ? searchParams?.timeCount
-            : "30";
-
-    const { sectionText, sectionTitle, sectionUrl, mode } = await generateWords(
-        {
-            mode: paramsMode,
-            numberOfWords:
-                paramsNumberOfWords as GenerateWordsSchema["numberOfWords"],
-            timeCount: paramsTimeCount as GenerateWordsSchema["timeCount"],
-        }
-    );
+    const paramsTimeCount = (searchParams?.timeCount ||
+        "30") as GenerateWordsSchema["timeCount"];
 
     return (
         <div className="grid h-full min-h-[calc(100vh-80px-96px)] place-items-center">
             <div className=" grid w-full max-w-4xl gap-8 ">
-                <TypingContainer
-                    mode={mode}
-                    text={sectionText}
-                    title={sectionTitle}
-                    url={sectionUrl}
-                    numberOfWords={paramsNumberOfWords}
-                    timeCount={
-                        paramsTimeCount as GenerateWordsSchema["timeCount"]
-                    }
-                />
+                <Suspense
+                    key={`${paramsMode}-${paramsNumberOfWords}-${paramsTimeCount}`}
+                    fallback={<TypingContainerSkeleton />}
+                >
+                    {/* @ts-expect-error Async Component */}
+                    <TypingContainerServer
+                        paramsNumberOfWords={paramsNumberOfWords}
+                        paramsMode={paramsMode}
+                        paramsTimeCount={paramsTimeCount}
+                    />
+                </Suspense>
             </div>
         </div>
     );
