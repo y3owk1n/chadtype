@@ -24,7 +24,6 @@ export default function Page({ searchParams }: PageProps) {
                     key={`${paramsMode}-${paramsNumberOfWords}-${paramsTimeCount}`}
                     fallback={<TypingContainerSkeleton />}
                 >
-                    {/* @ts-expect-error Async Component */}
                     <TypingContainerServer
                         paramsNumberOfWords={paramsNumberOfWords}
                         paramsMode={paramsMode}
