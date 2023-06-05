@@ -59,7 +59,7 @@ export function useTypeContext({
         const matchedError = errorIndex.find(
             (errorIdx) => errorIdx === currentCharIndex - 1
         );
-        if (matchedError) {
+        if (matchedError !== undefined) {
             const updatedError = errorIndex.filter(
                 (error) => error !== matchedError
             );
@@ -127,6 +127,10 @@ export function useTypeContext({
         setTypingText((prev) => prev + " " + newWords.sectionText);
         return;
     };
+
+    useEffect(() => {
+        if (initialText) setTypingText(initialText);
+    }, [initialText]);
 
     useEffect(() => {
         if (!startTime || progress === "PENDING") {
@@ -224,10 +228,13 @@ export function useTypeContext({
     const wordsBeforeCurrentCharacter = typingText
         .substring(0, currentCharIndex || 0)
         .split("");
+
     const errorIndexBeforeCurrentCharacter = errorIndex.filter(
-        (error) => error < currentCharIndex
+        (error) => error <= currentCharIndex
     );
+
     const currentCharacter = typingText[currentCharIndex || 0];
+
     const wordsAfterCurrentCharacter = typingText
         .substring(currentCharIndex + 1)
         .split("");
