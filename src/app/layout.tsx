@@ -17,8 +17,8 @@ export const metadata = {
     generator: "Next.js",
     referrer: "origin-when-cross-origin",
     title: {
-        default: siteConfig.name,
         template: `%s | ${siteConfig.name}`,
+        default: siteConfig.name,
     },
     description: siteConfig.description,
     keywords: ["Typing", "Game", "Type", "Speed"],
