@@ -7,6 +7,12 @@ interface PageProps {
     searchParams?: { [key: string]: string | string[] | undefined };
 }
 
+export const metadata = {
+    alternates: {
+        canonical: "/",
+    },
+};
+
 export default function Page({ searchParams }: PageProps) {
     const paramsMode = (searchParams?.mode ||
         "words") as GenerateWordsSchema["mode"];
