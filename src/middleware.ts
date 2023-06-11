@@ -23,6 +23,8 @@ const blockedUAs = [
     "Mozilla/5.0 (Linux; Android 6.0.1; Nexus 5X Build/MMB29P) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.5735.90 Mobile Safari/537.36 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)",
 ];
 
+const blockedIps = ["114.0.5735.90"];
+
 export default async function middleware(
     request: NextRequest,
     event: NextFetchEvent
@@ -30,7 +32,7 @@ export default async function middleware(
     const ip = request.ip ?? "127.0.0.1";
 
     const { ua } = userAgent(request);
-    if (blockedUAs.includes(ua)) {
+    if (blockedUAs.includes(ua) || blockedIps.includes(ip)) {
         return NextResponse.redirect(new URL("/blocked", request.url));
     }
     const { success, pending, limit, reset, remaining } = await ratelimit.limit(
