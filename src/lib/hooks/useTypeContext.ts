@@ -1,12 +1,11 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 import { getRandomWords, type GenerateWordsSchema } from "../queries";
 import { useCountdown } from "./useCountdown";
 import { useInputFocus } from "./useInputFocus";
-import { useIntervalWhen } from "./useIntervalWhen";
 import { useKeyPress } from "./useKeyPress";
 import { usePageLeave } from "./usePageLeave";
 
@@ -22,7 +21,9 @@ export function useTypeContext({
     timeCount,
 }: TypeContextOptions) {
     const router = useRouter();
-    const inputRef = useRef<HTMLInputElement>(null);
+    // const inputRef = useRef<HTMLInputElement>(null);
+
+    const [input, inputRef] = useState<HTMLInputElement | null>(null);
 
     const [typingText, setTypingText] = useState(initialText);
 
@@ -76,9 +77,9 @@ export function useTypeContext({
                 return;
             },
             onComplete: () => {
-                if (inputRef.current) {
+                if (input) {
                     setProgress("END");
-                    inputRef.current.disabled = true;
+                    input.disabled = true;
                     setIsStart(false);
                 }
             },
@@ -86,20 +87,20 @@ export function useTypeContext({
     });
 
     const startTypingGame = useCallback(() => {
-        if (inputRef.current && progress === "PENDING") {
+        if (input && progress === "PENDING") {
             if (mode === "time") {
                 setIsStart(true);
             }
             setProgress("STARTED");
             setStartTime(currentTime());
-            inputRef.current.disabled = false;
-            inputRef.current.focus();
+            input.disabled = false;
+            input.focus();
         }
-    }, [currentTime, mode, progress, setIsStart]);
+    }, [currentTime, input, mode, progress, setIsStart]);
 
     const restart = useCallback(() => {
-        if (inputRef.current) {
-            inputRef.current.value = "";
+        if (input) {
+            input.value = "";
         }
         setIsStart(false);
         setAuccuracy(0);
@@ -110,9 +111,9 @@ export function useTypeContext({
         setTotalDuration(0);
         setProgress("PENDING");
         setErrorIndex([]);
-    }, []);
+    }, [input, setIsStart]);
 
-    const inputCharArr: string[] = inputRef.current?.value.split("") || [];
+    const inputCharArr: string[] = input?.value.split("") || [];
 
     const inputCharLength = inputCharArr.length;
     const lastIndex = inputCharLength - 1;
@@ -136,8 +137,8 @@ export function useTypeContext({
 
     useEffect(() => {
         if (!startTime || progress === "PENDING") {
-            if (inputRef.current) {
-                inputRef.current.disabled = true;
+            if (input) {
+                input.disabled = true;
             }
             return;
         }
@@ -153,9 +154,9 @@ export function useTypeContext({
 
         // If finished typing
         if (inputCharLength === typingText.length) {
-            if (inputRef.current) {
+            if (input) {
                 setProgress("END");
-                inputRef.current.disabled = true;
+                input.disabled = true;
             }
         }
 
@@ -203,6 +204,11 @@ export function useTypeContext({
         currentChar,
         currentWord,
         lastIndex,
+        currentTime,
+        calculateAccuracy,
+        mode,
+        input,
+        handleErrors,
     ]);
 
     useKeyPress((key) => {
@@ -219,7 +225,7 @@ export function useTypeContext({
     useInputFocus({
         setBlurCb: () => setIsFocus(false),
         setFocusCb: () => setIsFocus(true),
-        elementRef: inputRef,
+        elementRef: input,
     });
 
     const handleRestart = () => {
@@ -242,6 +248,7 @@ export function useTypeContext({
         .split("");
 
     return {
+        input,
         inputRef,
         isFocus,
         wordsBeforeCurrentCharacter,

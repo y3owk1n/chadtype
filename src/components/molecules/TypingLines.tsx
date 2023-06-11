@@ -8,6 +8,7 @@ import { useInView } from "react-intersection-observer";
 interface TypingLinesProps {
     startTypingGame: ReturnType<typeof useTypeContext>["startTypingGame"];
     inputRef: ReturnType<typeof useTypeContext>["inputRef"];
+    input: ReturnType<typeof useTypeContext>["input"];
     isFocus: ReturnType<typeof useTypeContext>["isFocus"];
     wordsBeforeCurrentCharacter: ReturnType<
         typeof useTypeContext
@@ -25,6 +26,7 @@ interface TypingLinesProps {
 export function TypingLines({
     startTypingGame,
     inputRef,
+    input,
     isFocus,
     wordsBeforeCurrentCharacter,
     currentCharacter,
@@ -72,7 +74,7 @@ export function TypingLines({
                 {!isFocus && progress === "STARTED" && (
                     <div
                         onClick={() => {
-                            inputRef.current?.focus();
+                            input?.focus();
                         }}
                         className="absolute left-0 top-0 grid h-full w-full place-items-center text-center backdrop-blur-sm"
                     >

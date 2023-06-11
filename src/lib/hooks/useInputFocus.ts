@@ -1,6 +1,6 @@
 "use client";
 
-import { type RefObject, useEffect } from "react";
+import { type RefObject, useEffect, Dispatch, SetStateAction } from "react";
 
 export function useInputFocus<T extends HTMLElement>({
     setFocusCb,
@@ -9,7 +9,7 @@ export function useInputFocus<T extends HTMLElement>({
 }: {
     setFocusCb: () => void;
     setBlurCb: () => void;
-    elementRef: RefObject<T>;
+    elementRef: T | null;
 }) {
     useEffect(() => {
         const handleFocus = () => {
@@ -22,7 +22,7 @@ export function useInputFocus<T extends HTMLElement>({
             setBlurCb();
         };
 
-        const element = elementRef.current;
+        const element = elementRef;
 
         if (element) {
             element.addEventListener("focus", handleFocus);
