@@ -14,7 +14,7 @@ export default function Blocked() {
                 <div className="grid gap-4">
                     <h1 className="text-4xl font-bold">Blocked</h1>
                     <p className="text-muted-foreground">
-                        Only allow 5 requests per 20 seconds. Try again later.
+                        Only allow 10 requests per 10 seconds. Try again later.
                     </p>
                 </div>
                 <div className="mx-auto flex gap-4">
