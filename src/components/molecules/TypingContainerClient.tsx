@@ -28,6 +28,7 @@ export function TypingContainerClient({
     const {
         startTypingGame,
         isFocus,
+        input,
         inputRef,
         progress,
         restart,
@@ -64,6 +65,7 @@ export function TypingContainerClient({
                     timeCount={timeCount}
                 />
                 <TypingLines
+                    input={input}
                     isFocus={isFocus}
                     startTypingGame={startTypingGame}
                     inputRef={inputRef}
