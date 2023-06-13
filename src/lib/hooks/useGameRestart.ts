@@ -12,7 +12,7 @@ import {
     progressAtom,
     startTimeAtom,
     totalDurationAtom,
-    wpmAtom,
+    wpmArrAtom,
 } from "../atoms";
 
 export function useGameRestart() {
@@ -23,9 +23,9 @@ export function useGameRestart() {
     const setCurrentWord = useSetAtom(currentWordAtom);
     const setCurrentCharIndex = useSetAtom(currentCharIndexAtom);
     const setErrorIndex = useSetAtom(errorIndexAtom);
-    const setWpm = useSetAtom(wpmAtom);
     const setAuccuracy = useSetAtom(accuracyAtom);
     const setTotalDuration = useSetAtom(totalDurationAtom);
+    const setWpmArray = useSetAtom(wpmArrAtom);
 
     const restart = useCallback(() => {
         if (input) {
@@ -36,10 +36,10 @@ export function useGameRestart() {
         setCurrentCharIndex(0);
         setCurrentWord(0);
         setStartTime(null);
-        setWpm(0);
         setTotalDuration(0);
         setProgress("PENDING");
         setErrorIndex([]);
+        setWpmArray([]);
     }, [
         input,
         setAuccuracy,
@@ -49,7 +49,7 @@ export function useGameRestart() {
         setProgress,
         setStartTime,
         setTotalDuration,
-        setWpm,
+        setWpmArray,
     ]);
 
     return { restart };
