@@ -14,11 +14,11 @@ Check it out here 👉🏻 [Official Site](https://chadtype.k92.gg)
 
 ### API credits
 
-- [Wikipedia](https://www.wikipedia.org/)
-- [Quotes](https://type.fit)
+-   [Wikipedia](https://www.wikipedia.org/)
+-   [Quotes](https://type.fit)
 
 ### Todo
 
-- [ ] Authentications
-- [ ] Allow to save and share scores
-- [ ] Showing statistics
+-   [ ] Authentications
+-   [ ] Allow to save and share scores
+-   [ ] Showing statistics
