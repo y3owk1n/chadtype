@@ -1,8 +1,10 @@
 "use client";
 
-import { type GenerateWordsSchema, type useTypeContext } from "@/lib";
+import { progressAtom, type GenerateWordsSchema, useGameRestart } from "@/lib";
 import { cn } from "@/utils";
+import { useAtomValue } from "jotai";
 import { ExternalLinkIcon, RotateCw } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 import {
     Tooltip,
@@ -15,17 +17,19 @@ import {
 interface TypingFooterProps {
     url?: string;
     mode: GenerateWordsSchema["mode"];
-    handleRestart: ReturnType<typeof useTypeContext>["handleRestart"];
-    progress: ReturnType<typeof useTypeContext>["progress"];
 }
 
-export function TypingFooter({
-    url,
-    mode,
-    handleRestart,
-    progress,
-}: TypingFooterProps) {
+export function TypingFooter({ url, mode }: TypingFooterProps) {
+    const progress = useAtomValue(progressAtom);
+    const { restart } = useGameRestart();
+    const router = useRouter();
+
     if (progress !== "END") return null;
+
+    const handleRestart = () => {
+        restart();
+        router.refresh();
+    };
 
     return (
         <div className="mx-auto flex items-center gap-2">

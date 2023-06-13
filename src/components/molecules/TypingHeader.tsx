@@ -1,7 +1,8 @@
 "use client";
 
-import { type useTypeContext, type GenerateWordsSchema } from "@/lib";
+import { type GenerateWordsSchema, progressAtom, countAtom } from "@/lib";
 import { cn } from "@/utils";
+import { useAtomValue } from "jotai";
 import { ExternalLinkIcon } from "lucide-react";
 
 import { Badge, Separator, badgeVariants } from "../atoms";
@@ -11,8 +12,6 @@ interface TypingHeaderProps {
     url?: string;
     mode: GenerateWordsSchema["mode"];
     numberOfWords: string;
-    progress: ReturnType<typeof useTypeContext>["progress"];
-    count: ReturnType<typeof useTypeContext>["count"];
     timeCount: GenerateWordsSchema["timeCount"];
 }
 
@@ -21,10 +20,11 @@ export function TypingHeader({
     url,
     mode,
     numberOfWords,
-    progress,
-    count,
     timeCount,
 }: TypingHeaderProps) {
+    const progress = useAtomValue(progressAtom);
+    const count = useAtomValue(countAtom);
+
     return (
         <div className="grid gap-4">
             {progress === "STARTED" && (
