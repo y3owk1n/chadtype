@@ -1,6 +1,8 @@
 "use client";
 
-import { type GenerateWordsSchema, useTypeContext } from "@/lib";
+import { type GenerateWordsSchema, typingTextAtom } from "@/lib";
+import { useSetAtom } from "jotai";
+import { useEffect } from "react";
 
 import { TypingFooter } from "./TypingFooter";
 import { TypingHeader } from "./TypingHeader";
@@ -25,71 +27,34 @@ export function TypingContainerClient({
     numberOfWords,
     timeCount,
 }: TypingContainerClientProps) {
-    const {
-        startTypingGame,
-        isFocus,
-        input,
-        inputRef,
-        progress,
-        restart,
-        handleRestart,
-        wordsBeforeCurrentCharacter,
-        currentCharacter,
-        wordsAfterCurrentCharacter,
-        errorIndexBeforeCurrentCharacter,
-        wpm,
-        accuracy,
-        totalDuration,
-        currentCharIndex,
-        typingText,
-        count,
-    } = useTypeContext({ text, mode, timeCount });
+    const setTypingText = useSetAtom(typingTextAtom);
 
+    useEffect(() => {
+        setTypingText(text);
+    }, [setTypingText, text]);
     return (
         <>
             <TypingNav
                 timeCount={timeCount}
-                restart={restart}
                 mode={mode}
                 numberOfWords={numberOfWords}
             />
 
             <div className="grid gap-4">
                 <TypingHeader
-                    progress={progress}
                     title={title}
                     url={url}
                     mode={mode}
                     numberOfWords={numberOfWords}
-                    count={count}
                     timeCount={timeCount}
                 />
                 <TypingLines
-                    input={input}
-                    isFocus={isFocus}
-                    startTypingGame={startTypingGame}
-                    inputRef={inputRef}
-                    wordsBeforeCurrentCharacter={wordsBeforeCurrentCharacter}
-                    currentCharacter={currentCharacter}
-                    wordsAfterCurrentCharacter={wordsAfterCurrentCharacter}
-                    progress={progress}
-                    errorIndexBeforeCurrentCharacter={
-                        errorIndexBeforeCurrentCharacter
-                    }
+                    mode={mode}
+                    timeCount={timeCount}
                 />
             </div>
-            <TypingStatistics
-                text={typingText}
-                wpm={wpm}
-                accuracy={accuracy}
-                totalDuration={totalDuration}
-                currentCharIndex={currentCharIndex}
-            />
-            <TypingFooter
-                mode={mode}
-                handleRestart={handleRestart}
-                progress={progress}
-            />
+            <TypingStatistics />
+            <TypingFooter mode={mode} />
         </>
     );
 }

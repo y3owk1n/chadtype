@@ -1,3 +1,6 @@
+"use client";
+
+import { atom, useAtom } from "jotai";
 import React from "react";
 
 const useEffectEvent = React.experimental_useEffectEvent;
@@ -13,9 +16,11 @@ interface UseCountdownOptions {
     onTick: () => void;
 }
 
+export const countAtom = atom<number>(0);
+
 export function useCountdown({ duration, options }: UseCountdownProps) {
     const [isStart, setIsStart] = React.useState(false);
-    const [count, setCount] = React.useState<number>(0);
+    const [count, setCount] = useAtom(countAtom);
     const intervalIdRef = React.useRef<number>(0);
 
     const handleClearInterval = () => {
@@ -46,5 +51,5 @@ export function useCountdown({ duration, options }: UseCountdownProps) {
         setCount(Math.round(duration / options.interval));
     }, [duration, options.interval, isStart]);
 
-    return { count, setIsStart };
+    return { setIsStart };
 }

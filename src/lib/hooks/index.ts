@@ -1,4 +1,3 @@
-export * from "./useTypeContext";
 export * from "./useQueryString";
 export * from "./useLockBody";
 export * from "./usePageLeave";
@@ -6,3 +5,5 @@ export * from "./useInputFocus";
 export * from "./useHotKeys";
 export * from "./useCountdown";
 export * from "./useIntervalWhen";
+export * from "./useKeyPress";
+export * from "./useGameRestart";

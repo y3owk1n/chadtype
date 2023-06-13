@@ -1,6 +1,6 @@
 "use client";
 
-import { type useTypeContext, type GenerateWordsSchema } from "@/lib";
+import {  type GenerateWordsSchema, useGameRestart } from "@/lib";
 import { cn } from "@/utils";
 import Link from "next/link";
 
@@ -24,7 +24,6 @@ interface TypingNavProps {
     mode: GenerateWordsSchema["mode"];
     numberOfWords: string;
     timeCount: GenerateWordsSchema['timeCount'];
-    restart: ReturnType<typeof useTypeContext>["restart"];
 }
 
 interface ModeMenu {
@@ -123,8 +122,8 @@ export function TypingNav({
     mode,
     numberOfWords,
     timeCount,
-    restart,
 }: TypingNavProps) {
+    const {restart} = useGameRestart();
     return (
         <>
             <ScrollArea className="mx-auto hidden h-full w-fit gap-4 rounded-md border p-2 md:flex">

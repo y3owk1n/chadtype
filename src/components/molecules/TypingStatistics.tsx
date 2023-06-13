@@ -1,24 +1,23 @@
 "use client";
 
-import { type useTypeContext } from "@/lib";
+import {
+    typingTextAtom,
+    wpmAtom,
+    accuracyAtom,
+    totalDurationAtom,
+    currentCharIndexAtom,
+} from "@/lib";
+import { useAtomValue } from "jotai";
 
 import { Badge } from "../atoms";
 
-interface TypingStatisticsProps {
-    text: string;
-    wpm: ReturnType<typeof useTypeContext>["wpm"];
-    accuracy: ReturnType<typeof useTypeContext>["accuracy"];
-    totalDuration: ReturnType<typeof useTypeContext>["totalDuration"];
-    currentCharIndex: ReturnType<typeof useTypeContext>["currentCharIndex"];
-}
+export function TypingStatistics() {
+    const typingText = useAtomValue(typingTextAtom);
+    const wpm = useAtomValue(wpmAtom);
+    const accuracy = useAtomValue(accuracyAtom);
+    const totalDuration = useAtomValue(totalDurationAtom);
+    const currentCharIndex = useAtomValue(currentCharIndexAtom);
 
-export function TypingStatistics({
-    text,
-    wpm,
-    accuracy,
-    totalDuration,
-    currentCharIndex,
-}: TypingStatisticsProps) {
     return (
         <>
             <div className="mx-auto flex flex-wrap items-center justify-center gap-2">
@@ -32,19 +31,19 @@ export function TypingStatistics({
                     className="w-fit text-xs text-gray-500"
                     variant="outline"
                 >
-                    Accuracy: {accuracy}%
+                    Accuracy: {accuracy.toFixed(2)}%
                 </Badge>
                 <Badge
                     className="w-fit text-xs text-gray-500"
                     variant="outline"
                 >
-                    Time: {totalDuration} mins
+                    Time: {totalDuration.toFixed(2)} mins
                 </Badge>
                 <Badge
                     className="w-fit text-xs text-gray-500"
                     variant="outline"
                 >
-                    Characters: {currentCharIndex} / {text.length}
+                    Characters: {currentCharIndex} / {typingText.length}
                 </Badge>
             </div>
         </>
