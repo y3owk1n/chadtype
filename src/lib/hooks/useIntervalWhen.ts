@@ -2,51 +2,26 @@
 
 import { useEffect, useRef } from "react";
 
-interface UseIntervalWhenOptions {
-    ms: number;
-    when: boolean;
-    startImmediately?: boolean;
-}
+import { useIsomorphicLayoutEffect } from "./useIsomorphicEffect";
 
-export function useIntervalWhen(
-    cb: () => void,
-    { ms, when, startImmediately }: UseIntervalWhenOptions
-): () => void {
-    const id = useRef<number | null>(null);
-    const onTick = useRef(cb);
-    const immediatelyCalled = useRef<boolean | null>(
-        startImmediately === true ? false : null
-    );
+export function useIntervalWhen(callback: () => void, delay: number | null) {
+    const savedCallback = useRef(callback);
 
-    const handleClearInterval = () => {
-        if (id.current !== null) {
-            window.clearInterval(id.current);
-            id.current = null;
-        }
-        immediatelyCalled.current = false;
-    };
+    // Remember the latest callback if it changes.
+    useIsomorphicLayoutEffect(() => {
+        savedCallback.current = callback;
+    }, [callback]);
 
+    // Set up the interval.
     useEffect(() => {
-        onTick.current = cb;
-    }, [cb]);
-
-    useEffect(() => {
-        if (
-            when === true &&
-            startImmediately === true &&
-            immediatelyCalled.current === false
-        ) {
-            onTick.current();
-            immediatelyCalled.current = true;
+        // Don't schedule if no delay is specified.
+        // Note: 0 is a valid value for delay.
+        if (!delay && delay !== 0) {
+            return;
         }
-    }, [startImmediately, when]);
 
-    useEffect(() => {
-        if (when === true) {
-            id.current = window.setInterval(onTick.current, ms);
-            return handleClearInterval;
-        }
-    }, [ms, when]);
+        const id = setInterval(() => savedCallback.current(), delay);
 
-    return handleClearInterval;
+        return () => clearInterval(id);
+    }, [delay]);
 }
