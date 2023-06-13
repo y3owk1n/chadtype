@@ -1,9 +1,10 @@
 "use client";
 
-import { type GenerateWordsSchema, typingTextAtom } from "@/lib";
-import { useSetAtom } from "jotai";
+import { type GenerateWordsSchema, typingTextAtom, progressAtom } from "@/lib";
+import { useAtomValue, useSetAtom } from "jotai";
 import { useEffect } from "react";
 
+import { TypingChart } from "./TypingChart";
 import { TypingFooter } from "./TypingFooter";
 import { TypingHeader } from "./TypingHeader";
 import { TypingLines } from "./TypingLines";
@@ -28,6 +29,7 @@ export function TypingContainerClient({
     timeCount,
 }: TypingContainerClientProps) {
     const setTypingText = useSetAtom(typingTextAtom);
+    const progress = useAtomValue(progressAtom);
 
     useEffect(() => {
         setTypingText(text);
@@ -41,17 +43,23 @@ export function TypingContainerClient({
             />
 
             <div className="grid gap-4">
-                <TypingHeader
-                    title={title}
-                    url={url}
-                    mode={mode}
-                    numberOfWords={numberOfWords}
-                    timeCount={timeCount}
-                />
-                <TypingLines
-                    mode={mode}
-                    timeCount={timeCount}
-                />
+                {progress === "END" ? (
+                    <TypingChart />
+                ) : (
+                    <>
+                        <TypingHeader
+                            title={title}
+                            url={url}
+                            mode={mode}
+                            numberOfWords={numberOfWords}
+                            timeCount={timeCount}
+                        />
+                        <TypingLines
+                            mode={mode}
+                            timeCount={timeCount}
+                        />
+                    </>
+                )}
             </div>
             <TypingStatistics />
             <TypingFooter mode={mode} />

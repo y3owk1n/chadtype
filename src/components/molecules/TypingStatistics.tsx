@@ -2,10 +2,10 @@
 
 import {
     typingTextAtom,
-    wpmAtom,
     accuracyAtom,
     totalDurationAtom,
     currentCharIndexAtom,
+    averageWpmAtom,
 } from "@/lib";
 import { useAtomValue } from "jotai";
 
@@ -13,7 +13,7 @@ import { Badge } from "../atoms";
 
 export function TypingStatistics() {
     const typingText = useAtomValue(typingTextAtom);
-    const wpm = useAtomValue(wpmAtom);
+    const averageWpm = useAtomValue(averageWpmAtom);
     const accuracy = useAtomValue(accuracyAtom);
     const totalDuration = useAtomValue(totalDurationAtom);
     const currentCharIndex = useAtomValue(currentCharIndexAtom);
@@ -25,7 +25,7 @@ export function TypingStatistics() {
                     className="w-fit text-xs text-gray-500"
                     variant="outline"
                 >
-                    WPM: {wpm.toFixed(2)}
+                    WPM: {averageWpm.toFixed(2)}
                 </Badge>
                 <Badge
                     className="w-fit text-xs text-gray-500"

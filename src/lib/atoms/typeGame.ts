@@ -1,5 +1,6 @@
 "use client";
 
+import { getAverage } from "@/utils";
 import { atom } from "jotai";
 
 export const inputAtom = atom<HTMLInputElement | null>(null);
@@ -22,7 +23,6 @@ export const errorIndexAtom = atom<number[]>([]);
 export const totalDurationAtom = atom(0);
 
 export const accuracyAtom = atom(0);
-export const wpmAtom = atom(0);
 
 export const wpmArrAtom = atom<number[]>([]);
 
@@ -45,4 +45,10 @@ export const errorIndexBeforeCurrentCharacterAtom = atom((get) => {
     const currentCharIndex = get(currentCharIndexAtom);
 
     return errorIndex.filter((error) => error <= currentCharIndex);
+});
+
+export const averageWpmAtom = atom((get) => {
+    const wpmArr = get(wpmArrAtom);
+
+    return getAverage(wpmArr);
 });
