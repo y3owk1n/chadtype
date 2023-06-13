@@ -1,6 +1,6 @@
 "use client";
 
-import {  type GenerateWordsSchema, useGameRestart } from "@/lib";
+import { type GenerateWordsSchema, useGameRestart } from "@/lib";
 import { cn } from "@/utils";
 import Link from "next/link";
 
@@ -23,7 +23,7 @@ import {
 interface TypingNavProps {
     mode: GenerateWordsSchema["mode"];
     numberOfWords: string;
-    timeCount: GenerateWordsSchema['timeCount'];
+    timeCount: GenerateWordsSchema["timeCount"];
 }
 
 interface ModeMenu {
@@ -118,12 +118,8 @@ const timeMenu: TimeMenu[] = [
     },
 ];
 
-export function TypingNav({
-    mode,
-    numberOfWords,
-    timeCount,
-}: TypingNavProps) {
-    const {restart} = useGameRestart();
+export function TypingNav({ mode, numberOfWords, timeCount }: TypingNavProps) {
+    const { restart } = useGameRestart();
     return (
         <>
             <ScrollArea className="mx-auto hidden h-full w-fit gap-4 rounded-md border p-2 md:flex">
@@ -342,8 +338,7 @@ export function TypingNav({
                                                 pathname: menu.pathname,
                                                 query: {
                                                     mode: menu.mode,
-                                                    timeCount:
-                                                        menu.timeCount,
+                                                    timeCount: menu.timeCount,
                                                     id: crypto.randomUUID(),
                                                 },
                                             }}
@@ -351,8 +346,7 @@ export function TypingNav({
                                         >
                                             <DropdownMenuCheckboxItem
                                                 checked={
-                                                    timeCount ===
-                                                    menu.timeCount
+                                                    timeCount === menu.timeCount
                                                 }
                                             >
                                                 {menu.label}
