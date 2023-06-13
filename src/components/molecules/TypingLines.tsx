@@ -11,12 +11,13 @@ import {
     typingTextAtom,
     type GenerateWordsSchema,
     startTimeAtom,
-    wpmAtom,
     accuracyAtom,
     totalDurationAtom,
     errorIndexAtom,
     currentWordAtom,
     getRandomWords,
+    useIntervalWhen,
+    wpmArrAtom,
 } from "@/lib";
 import { useInputFocus, useKeyPress, usePageLeave, useCountdown } from "@/lib";
 import { cn } from "@/utils";
@@ -26,7 +27,7 @@ import { useInView } from "react-intersection-observer";
 
 interface TypingLinesProps {
     mode: GenerateWordsSchema["mode"];
-    timeCount: GenerateWordsSchema['timeCount']
+    timeCount: GenerateWordsSchema["timeCount"];
 }
 
 export function TypingLines({ mode, timeCount }: TypingLinesProps) {
@@ -55,8 +56,8 @@ export function TypingLines({ mode, timeCount }: TypingLinesProps) {
         errorIndexBeforeCurrentCharacterAtom
     );
 
+    const [wpmArr, setWpmArr] = useAtom(wpmArrAtom);
 
-    const setWpm = useSetAtom(wpmAtom);
     const setAuccuracy = useSetAtom(accuracyAtom);
     const setTotalDuration = useSetAtom(totalDurationAtom);
 
@@ -80,7 +81,6 @@ export function TypingLines({ mode, timeCount }: TypingLinesProps) {
         return new Date().getTime();
     }, []);
 
-
     const { setIsStart } = useCountdown({
         duration: Number(timeCount) * 1000,
         options: {
@@ -98,7 +98,6 @@ export function TypingLines({ mode, timeCount }: TypingLinesProps) {
         },
     });
 
-
     const startTypingGame = useCallback(() => {
         if (input && progress === "PENDING") {
             if (mode === "time") {
@@ -109,7 +108,15 @@ export function TypingLines({ mode, timeCount }: TypingLinesProps) {
             input.disabled = false;
             input.focus();
         }
-    }, [currentTime, input, mode, progress, setIsStart, setProgress, setStartTime]);
+    }, [
+        currentTime,
+        input,
+        mode,
+        progress,
+        setIsStart,
+        setProgress,
+        setStartTime,
+    ]);
 
     const calculateAccuracy = useCallback(() => {
         return (
@@ -129,26 +136,23 @@ export function TypingLines({ mode, timeCount }: TypingLinesProps) {
         }
     }, [currentCharIndex, errorIndex, setErrorIndex]);
 
+    const inputCharArr: string[] = input?.value.split("") || [];
 
-        const inputCharArr: string[] = input?.value.split("") || [];
+    const inputCharLength = inputCharArr.length;
+    const lastIndex = inputCharLength - 1;
 
-        const inputCharLength = inputCharArr.length;
-        const lastIndex = inputCharLength - 1;
+    const latestChar = inputCharArr[currentCharIndex];
 
-        const latestChar = inputCharArr[currentCharIndex];
-
-        const currentChar = typingText[currentCharIndex];
+    const currentChar = typingText[currentCharIndex];
 
     const getMoreWords = useCallback(async () => {
-
         const newWords = await getRandomWords({
             numberOfWords: 30,
             mode: "time",
         });
         setTypingText(typingText + " " + newWords.sectionText);
         return;
-    }, [setTypingText, typingText])
-
+    }, [setTypingText, typingText]);
 
     useEffect(() => {
         if (!startTime || progress === "PENDING") {
@@ -158,13 +162,10 @@ export function TypingLines({ mode, timeCount }: TypingLinesProps) {
             return;
         }
 
-
         // If havent start typing yet
         if (!latestChar && inputCharLength === currentCharIndex) return;
 
         const durationInMinutes = (currentTime() - startTime) / 60000.0;
-        const wpm = currentCharIndex / durationInMinutes / 5;
-        setWpm(wpm);
         setAuccuracy(calculateAccuracy());
         setTotalDuration(durationInMinutes);
 
@@ -210,8 +211,42 @@ export function TypingLines({ mode, timeCount }: TypingLinesProps) {
         }
 
         return;
-    }, [startTime, progress, currentCharIndex, typingText, currentWord, currentTime, calculateAccuracy, mode, input, handleErrors, setWpm, setAuccuracy, setTotalDuration, setProgress, setCurrentCharIndex, setCurrentWord, setErrorIndex, latestChar, inputCharLength, currentChar, lastIndex, getMoreWords]);
+    }, [
+        startTime,
+        progress,
+        currentCharIndex,
+        typingText,
+        currentWord,
+        currentTime,
+        calculateAccuracy,
+        mode,
+        input,
+        handleErrors,
+        setAuccuracy,
+        setTotalDuration,
+        setProgress,
+        setCurrentCharIndex,
+        setCurrentWord,
+        setErrorIndex,
+        latestChar,
+        inputCharLength,
+        currentChar,
+        lastIndex,
+        getMoreWords,
+    ]);
 
+    const updateWpmArr = useCallback(() => {
+        if (startTime) {
+            const durationInMinutes = (currentTime() - startTime) / 60000.0;
+            const wpm = currentCharIndex / durationInMinutes / 5;
+            setWpmArr([...wpmArr, wpm]);
+        }
+    }, [currentCharIndex, currentTime, setWpmArr, startTime, wpmArr]);
+
+    useIntervalWhen(
+        updateWpmArr,
+        progress === "STARTED" && startTime !== null ? 1000 : null
+    );
 
     useKeyPress((key) => {
         // Press enter key to start
@@ -221,7 +256,9 @@ export function TypingLines({ mode, timeCount }: TypingLinesProps) {
     });
 
     usePageLeave(() => {
-        setIsFocus(false);
+        if (input) {
+            input.blur();
+        }
     });
 
     useInputFocus({
