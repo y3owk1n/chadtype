@@ -62,7 +62,10 @@ export function TypingContainerClient({
                 )}
             </div>
             <TypingStatistics />
-            <TypingFooter mode={mode} />
+            <TypingFooter
+                mode={mode}
+                url={url}
+            />
         </>
     );
 }
