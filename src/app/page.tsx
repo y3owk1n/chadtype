@@ -13,6 +13,8 @@ export const metadata = {
     },
 };
 
+export const dynamic = "force-dynamic";
+
 export default function Page({ searchParams }: PageProps) {
     const paramsMode = (searchParams?.mode ||
         "words") as GenerateWordsSchema["mode"];
