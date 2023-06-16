@@ -3,6 +3,7 @@
 import { type GenerateWordsSchema, useGameRestart } from "@/lib";
 import { cn } from "@/utils";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 import {
     Button,
@@ -120,6 +121,12 @@ const timeMenu: TimeMenu[] = [
 
 export function TypingNav({ mode, numberOfWords, timeCount }: TypingNavProps) {
     const { restart } = useGameRestart();
+    const router = useRouter();
+
+    const handleLinkClick = () => {
+        router.refresh();
+        restart();
+    };
     return (
         <>
             <ScrollArea className="mx-auto hidden h-full w-fit gap-4 rounded-md border p-2 md:flex">
@@ -131,12 +138,10 @@ export function TypingNav({ mode, numberOfWords, timeCount }: TypingNavProps) {
                                 query = {
                                     mode: menu.mode,
                                     numberOfWords: menu.numberOfWords,
-                                    id: crypto.randomUUID(),
                                 };
                             } else {
                                 query = {
                                     mode: menu.mode,
-                                    id: crypto.randomUUID(),
                                 };
                             }
                             return (
@@ -155,7 +160,7 @@ export function TypingNav({ mode, numberOfWords, timeCount }: TypingNavProps) {
                                                 pathname: menu.pathname,
                                                 query,
                                             }}
-                                            onClick={restart}
+                                            onClick={handleLinkClick}
                                         >
                                             {menu.label}
                                         </Link>
@@ -192,10 +197,9 @@ export function TypingNav({ mode, numberOfWords, timeCount }: TypingNavProps) {
                                                             mode: menu.mode,
                                                             numberOfWords:
                                                                 menu.numberOfWords,
-                                                            id: crypto.randomUUID(),
                                                         },
                                                     }}
-                                                    onClick={restart}
+                                                    onClick={handleLinkClick}
                                                 >
                                                     {menu.label}
                                                 </Link>
@@ -233,10 +237,9 @@ export function TypingNav({ mode, numberOfWords, timeCount }: TypingNavProps) {
                                                             mode: menu.mode,
                                                             timeCount:
                                                                 menu.timeCount,
-                                                            id: crypto.randomUUID(),
                                                         },
                                                     }}
-                                                    onClick={restart}
+                                                    onClick={handleLinkClick}
                                                 >
                                                     {menu.label}
                                                 </Link>
@@ -266,12 +269,10 @@ export function TypingNav({ mode, numberOfWords, timeCount }: TypingNavProps) {
                                 query = {
                                     mode: menu.mode,
                                     numberOfWords: menu.numberOfWords,
-                                    id: crypto.randomUUID(),
                                 };
                             } else {
                                 query = {
                                     mode: menu.mode,
-                                    id: crypto.randomUUID(),
                                 };
                             }
                             return (
@@ -282,7 +283,7 @@ export function TypingNav({ mode, numberOfWords, timeCount }: TypingNavProps) {
                                         pathname: menu.pathname,
                                         query,
                                     }}
-                                    onClick={restart}
+                                    onClick={handleLinkClick}
                                 >
                                     <DropdownMenuCheckboxItem
                                         checked={mode === menu.mode}
@@ -307,10 +308,9 @@ export function TypingNav({ mode, numberOfWords, timeCount }: TypingNavProps) {
                                                     mode: menu.mode,
                                                     numberOfWords:
                                                         menu.numberOfWords,
-                                                    id: crypto.randomUUID(),
                                                 },
                                             }}
-                                            onClick={restart}
+                                            onClick={handleLinkClick}
                                         >
                                             <DropdownMenuCheckboxItem
                                                 checked={
@@ -339,10 +339,9 @@ export function TypingNav({ mode, numberOfWords, timeCount }: TypingNavProps) {
                                                 query: {
                                                     mode: menu.mode,
                                                     timeCount: menu.timeCount,
-                                                    id: crypto.randomUUID(),
                                                 },
                                             }}
-                                            onClick={restart}
+                                            onClick={handleLinkClick}
                                         >
                                             <DropdownMenuCheckboxItem
                                                 checked={
