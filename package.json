@@ -21,7 +21,7 @@
         "@radix-ui/react-slot": "^1.0.2",
         "@radix-ui/react-toggle": "^1.0.3",
         "@radix-ui/react-tooltip": "^1.0.6",
-        "@t3-oss/env-nextjs": "^0.4.0",
+        "@t3-oss/env-nextjs": "^0.4.1",
         "@upstash/ratelimit": "^0.4.3",
         "@upstash/redis": "^1.21.0",
         "class-variance-authority": "^0.6.0",
