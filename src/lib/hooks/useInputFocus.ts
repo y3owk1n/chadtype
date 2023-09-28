@@ -1,6 +1,6 @@
 "use client";
 
-import { type RefObject, useEffect, Dispatch, SetStateAction } from "react";
+import { useEffect } from "react";
 
 export function useInputFocus<T extends HTMLElement>({
     setFocusCb,
