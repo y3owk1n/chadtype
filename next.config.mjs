@@ -1,14 +1,21 @@
+import million from "million/compiler";
+
 /**
  * Run `build` or `dev` with `SKIP_ENV_VALIDATION` to skip env validation. This is especially useful
  * for Docker builds.
  */
 await import("./src/env.mjs");
 
+const millionConfig = {
+    // auto: true,
+    // if you're using RSC:
+    auto: { rsc: true },
+};
+
 /** @type {import("next").NextConfig} */
 const config = {
     reactStrictMode: true,
     experimental: {
-        appDir: true,
         serverActions: true,
         esmExternals: "loose",
     },
@@ -24,4 +31,4 @@ const config = {
     //     defaultLocale: "en",
     // },
 };
-export default config;
+export default million.next(config, millionConfig);
