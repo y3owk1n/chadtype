@@ -34,7 +34,7 @@ dependencies:
     version: 1.0.7(@types/react-dom@18.2.10)(@types/react@18.2.25)(react-dom@18.2.0)(react@18.2.0)
   '@t3-oss/env-nextjs':
     specifier: ^0.7.0
-    version: 0.7.0(typescript@5.2.2)(zod@3.22.2)
+    version: 0.7.0(typescript@5.2.2)(zod@3.22.4)
   '@upstash/ratelimit':
     specifier: ^0.4.4
     version: 0.4.4
@@ -93,11 +93,11 @@ dependencies:
     specifier: ^1.0.7
     version: 1.0.7(tailwindcss@3.3.3)
   zod:
-    specifier: ^3.22.2
-    version: 3.22.2
+    specifier: ^3.22.4
+    version: 3.22.4
   zod-validation-error:
     specifier: ^1.5.0
-    version: 1.5.0(zod@3.22.2)
+    version: 1.5.0(zod@3.22.4)
 
 devDependencies:
   '@swc-jotai/react-refresh':
@@ -1357,7 +1357,7 @@ packages:
       tslib: 2.6.2
     dev: false
 
-  /@t3-oss/env-core@0.7.0(typescript@5.2.2)(zod@3.22.2):
+  /@t3-oss/env-core@0.7.0(typescript@5.2.2)(zod@3.22.4):
     resolution: {integrity: sha512-cgunN82CqgQOOyuMOK/bGtujX5/ooXQTwGMJVWI6mCowq6WE5EgRLOqF/DRcrElI0gSFGA9i9GrxzCnk73HZLQ==}
     peerDependencies:
       typescript: '>=4.7.2'
@@ -1367,10 +1367,10 @@ packages:
         optional: true
     dependencies:
       typescript: 5.2.2
-      zod: 3.22.2
+      zod: 3.22.4
     dev: false
 
-  /@t3-oss/env-nextjs@0.7.0(typescript@5.2.2)(zod@3.22.2):
+  /@t3-oss/env-nextjs@0.7.0(typescript@5.2.2)(zod@3.22.4):
     resolution: {integrity: sha512-rjQIt6P3tac2eRx4BNQLNaJ+AIb2P8wXw4uFvYbEekqMGShikkUALnX3hUn1twYiGVGHXRm6UbU+LqtjIktuGg==}
     peerDependencies:
       typescript: '>=4.7.2'
@@ -1379,9 +1379,9 @@ packages:
       typescript:
         optional: true
     dependencies:
-      '@t3-oss/env-core': 0.7.0(typescript@5.2.2)(zod@3.22.2)
+      '@t3-oss/env-core': 0.7.0(typescript@5.2.2)(zod@3.22.4)
       typescript: 5.2.2
-      zod: 3.22.2
+      zod: 3.22.4
     dev: false
 
   /@trivago/prettier-plugin-sort-imports@4.2.0(prettier@3.0.3):
@@ -4530,15 +4530,15 @@ packages:
     engines: {node: '>=10'}
     dev: true
 
-  /zod-validation-error@1.5.0(zod@3.22.2):
+  /zod-validation-error@1.5.0(zod@3.22.4):
     resolution: {integrity: sha512-/7eFkAI4qV0tcxMBB/3+d2c1P6jzzZYdYSlBuAklzMuCrJu5bzJfHS0yVAS87dRHVlhftd6RFJDIvv03JgkSbw==}
     engines: {node: '>=16.0.0'}
     peerDependencies:
       zod: ^3.18.0
     dependencies:
-      zod: 3.22.2
+      zod: 3.22.4
     dev: false
 
-  /zod@3.22.2:
-    resolution: {integrity: sha512-wvWkphh5WQsJbVk1tbx1l1Ly4yg+XecD+Mq280uBGt9wa5BKSWf4Mhp6GmrkPixhMxmabYY7RbzlwVP32pbGCg==}
+  /zod@3.22.4:
+    resolution: {integrity: sha512-iC+8Io04lddc+mVqQ9AZ7OQ2MrUKGN+oIQyq1vemgt46jwCwLfhq7/pwnBnNXXXZb8VTVLKwp9EDkx+ryxIWmg==}
     dev: false
